@@ -40,6 +40,9 @@ const CartScreen = ({ match, location, history }) => {
     <>
       <Header />
       <div className="container">
+        <button className="btn-back" onClick={() => window.history.back()}>
+          <i className="fas fa-arrow-left"></i> Quay lại
+        </button>
         {cartItems.length === 0 ? (
           <div className=" alert alert-info text-center mt-3">
             Hiện tại chưa có sản phẩm trong giỏ hàng

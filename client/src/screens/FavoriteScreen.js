@@ -39,6 +39,9 @@ const FavoriteScreen = ({ match, location, history }) => {
       <Header />
       {/* Cart */}
       <div className="container">
+        <button className="btn-back" onClick={() => window.history.back()}>
+          <i className="fas fa-arrow-left"></i> Quay lại
+        </button>
         {listStore?.length === 0 || !listStore ? (
           <div className=" alert alert-info text-center mt-3">
             Hiện tại chưa có sản phẩm trong giỏ hàng

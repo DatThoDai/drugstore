@@ -114,6 +114,9 @@ const SingleProduct = ({ history, match }) => {
     <>
       <Header />
       <div className="container single-product">
+        <button className="btn-back" onClick={() => window.history.back()}>
+          <i className="fas fa-arrow-left"></i> Quay lại
+        </button>
         {loading ? (
           <Loading />
         ) : error ? (

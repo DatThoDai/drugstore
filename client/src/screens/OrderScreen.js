@@ -216,6 +216,9 @@ const OrderScreen = ({ match }) => {
     <>
       <Header />
       <div className="container">
+        <button className="btn-back" onClick={() => window.history.back()}>
+          <i className="fas fa-arrow-left"></i> Quay lại
+        </button>
         {loading ? (
           <Loading />
         ) : error ? (

@@ -30,6 +30,9 @@ const PaymentScreen = ({ history }) => {
           className="Login2 col-md-8 col-lg-4 col-11"
           onSubmit={submitHandler}
         >
+          <button type="button" className="btn-back" onClick={() => window.history.back()}>
+            <i className="fas fa-arrow-left"></i> Quay lại
+          </button>
           <h6>Lựa chọn hình thức thanh toán</h6>
           <div className="payment-container">
             <div className="radio-container">

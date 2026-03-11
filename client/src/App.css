@@ -358,6 +358,9 @@ input:focus,select:focus,textarea:focus {
 .table-bordered { background-color: var(--color-bg); border-radius: var(--radius-md); overflow: hidden; }
 .subtotal-order button { width: 100%; padding: 14px 0; border: none; text-transform: uppercase; font-size: 13px; font-weight: 700; font-family: 'Nunito Sans',sans-serif; background-color: var(--color-primary); color: var(--color-white); border-radius: var(--radius-md); cursor: pointer; transition: var(--transition); letter-spacing: .05em; box-shadow: var(--shadow-md); }
 .subtotal-order button:hover { background-color: var(--color-cta); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.btn-back { display:inline-flex; align-items:center; gap:6px; padding:7px 16px; margin:14px 0 6px; background:transparent; border:1.5px solid var(--color-border); border-radius:var(--radius-md); color:var(--color-text-muted); font-size:13px; font-weight:600; cursor:pointer; transition:var(--transition); }
+.btn-back:hover { background:var(--color-bg); border-color:var(--color-primary); color:var(--color-primary); }
+.Login .btn-back,.Login2 .btn-back { width:auto; margin-bottom:8px; }
 
 /* PAGINATION */
 .pagination .page-link { padding: 10px 24px; color: var(--color-primary); font-family: 'Nunito Sans',sans-serif; font-weight: 600; border-color: var(--color-border); transition: var(--transition); cursor: pointer; }

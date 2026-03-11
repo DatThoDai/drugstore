@@ -168,6 +168,9 @@ const PlaceOrderScreen = ({ history }) => {
     <>
       <Header />
       <div className="container">
+        <button className="btn-back" onClick={() => window.history.back()}>
+          <i className="fas fa-arrow-left"></i> Quay lại
+        </button>
         <div className="row  order-detail">
           <div className="col-lg-4 col-sm-4 mb-lg-4 mb-5 mb-sm-0">
             <div className="row ">

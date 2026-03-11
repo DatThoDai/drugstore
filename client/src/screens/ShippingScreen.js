@@ -29,6 +29,9 @@ const ShippingScreen = ({ history }) => {
           className="Login col-md-8 col-lg-4 col-11"
           onSubmit={submitHandler}
         >
+          <button type="button" className="btn-back" onClick={() => window.history.back()}>
+            <i className="fas fa-arrow-left"></i> Quay lại
+          </button>
           <h6>Địa chỉ giao hàng</h6>
           <input
             type="text"
