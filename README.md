@@ -2,7 +2,7 @@
 
 ## 🎬 Demo Video
 
-👉 YouTube: **(Coming soon)**
+👉 YouTube: [Watch Demo Video](https://youtu.be/JNiTnSiiQGw)
 
 ---
 
