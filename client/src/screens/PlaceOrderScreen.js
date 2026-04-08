@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { createOrder } from "../Redux/Actions/OrderActions";
@@ -9,6 +9,8 @@ import Message from "./../components/LoadingError/Error";
 const PlaceOrderScreen = ({ history }) => {
   window.scrollTo(0, 0);
 
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
+
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const userLogin = useSelector((state) => state.userLogin);
@@ -16,7 +18,7 @@ const PlaceOrderScreen = ({ history }) => {
   const { userInfo } = userLogin;
   const typePay = localStorage.getItem("typePay");
   const payRaw = localStorage.getItem("paymentMethod");
-  const pay = payRaw ? JSON.parse(payRaw) : "Paypal";
+  const pay = payRaw ? JSON.parse(payRaw) : "VNPay";
 
   const addDecimals = (num) => {
     return Math.round(num * 100) / 100;
@@ -118,7 +120,7 @@ const PlaceOrderScreen = ({ history }) => {
         createOrder({
           orderItems: transformedOrderItems,
           shippingAddress: cart.shippingAddress,
-          paymentMethod: pay === "Credit" ? "Credit" : "Paypal",
+          paymentMethod: pay === "Credit" ? "Credit" : "VNPay",
           itemsPrice: prices.itemsLoanPrice,
           shippingPrice: prices.shippingLoanPrice,
           taxPrice: prices.taxLoanPrice,
@@ -132,7 +134,7 @@ const PlaceOrderScreen = ({ history }) => {
         createOrder({
           orderItems: transformedOrderItems,
           shippingAddress: cart.shippingAddress,
-          paymentMethod: pay === "Credit" ? "Credit" : "Paypal",
+          paymentMethod: pay === "Credit" ? "Credit" : "VNPay",
           itemsPrice: prices.itemsPrice,
           shippingPrice: prices.shippingPrice,
           taxPrice: prices.taxPrice,
@@ -168,156 +170,133 @@ const PlaceOrderScreen = ({ history }) => {
     <>
       <Header />
       <div className="container">
-        <button className="btn-back" onClick={() => window.history.back()}>
+        <button className="btn-back" onClick={() => setShowLeaveModal(true)}>
           <i className="fas fa-arrow-left"></i> Quay lại
         </button>
-        <div className="row  order-detail">
-          <div className="col-lg-4 col-sm-4 mb-lg-4 mb-5 mb-sm-0">
-            <div className="row ">
-              <div className="col-md-4 center">
-                <div className="alert-success order-box">
-                  <i class="fas fa-user"></i>
-                </div>
+        <div className="row order-detail-cards mt-4">
+          <div className="col-lg-4 col-md-6 mb-4">
+            <div className="checkout-info-card">
+              <div className="icon-wrapper">
+                <i className="fas fa-user"></i>
               </div>
-              <div className="col-md-8 center">
-                <h5>
-                  <strong>Khách hàng</strong>
-                </h5>
-                <p>{userInfo.name}</p>
+              <div className="info-content">
+                <h5>Thông tin khách hàng</h5>
+                <p><strong>{userInfo.name}</strong></p>
                 <p>{userInfo.email}</p>
               </div>
             </div>
           </div>
-          {/* 2 */}
-          <div className="col-lg-4 col-sm-4 mb-lg-4 mb-5 mb-sm-0">
-            <div className="row">
-              <div className="col-md-4 center">
-                <div className="alert-success order-box">
-                  <i className="fas fa-truck-moving"></i>
-                </div>
+          <div className="col-lg-4 col-md-6 mb-4">
+            <div className="checkout-info-card">
+              <div className="icon-wrapper">
+                <i className="fas fa-truck"></i>
               </div>
-              <div className="col-md-8 center">
-                <h5>
-                  <strong>Thông tin đơn hàng</strong>
-                </h5>
-                <p>Shipping: {cart.shippingAddress.country}</p>
-                <p>
-                  Hình thức thanh toán:{" "}
-                  {(pay || cart.paymentMethod) === "Credit"
-                    ? "Thanh toán khi nhận hàng"
-                    : "Paypal hoặc thẻ tín dụng / thẻ ghi nợ"}
-                </p>
+              <div className="info-content">
+                <h5>Thanh toán & Vận chuyển</h5>
+                <p>Quốc gia: {cart.shippingAddress.country}</p>
+                <p>Thanh toán: {(pay || cart.paymentMethod) === "Credit" ? "Trực tiếp (COD)" : "VNPay"}</p>
               </div>
             </div>
           </div>
-          {/* 3 */}
-          <div className="col-lg-4 col-sm-4 mb-lg-4 mb-5 mb-sm-0">
-            <div className="row">
-              <div className="col-md-4 center">
-                <div className="alert-success order-box">
-                  <i className="fas fa-map-marker-alt"></i>
-                </div>
+          <div className="col-lg-4 col-md-6 mb-4">
+            <div className="checkout-info-card">
+              <div className="icon-wrapper">
+                <i className="fas fa-map-marker-alt"></i>
               </div>
-              <div className="col-md-8 center">
-                <h5>
-                  <strong>Deliver to</strong>
-                </h5>
-                <p>
-                  Địa chỉ nhận hàng: {cart.shippingAddress.city},{" "}
-                  {cart.shippingAddress.address},{" "}
-                  {cart.shippingAddress.postalCode}
-                </p>
+              <div className="info-content">
+                <h5>Địa chỉ nhận hàng</h5>
+                <p>{cart.shippingAddress.address}</p>
+                <p>{cart.shippingAddress.city}<br/>Mã bưu điện: {cart.shippingAddress.postalCode}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="row order-products justify-content-between">
+        <div className="row mt-2 mb-5">
           <div className="col-lg-8">
             {cart.cartItems.length === 0 ? (
               <Message variant="alert-info mt-5">
                 Chưa có sản phẩm nào trong giỏ hàng
               </Message>
             ) : (
-              <>
+              <div className="checkout-products-list">
                 {cart.cartItems.map((item, index) => (
-                  <div className="order-product row" key={index}>
-                    <div className="col-md-3 col-6">
-                      <img src={item.image} alt={item.name} />
-                    </div>
-                    <div className="col-md-5 col-6 d-flex align-items-center">
+                  <div className="checkout-product-row" key={index}>
+                    <img src={item.image} alt={item.name} />
+                    <div className="product-details">
                       <Link to={`/products/${item.product}`}>
                         <h6>{item.name}</h6>
                       </Link>
+                      <div className="price-calc">
+                        <span>{showPrice(item.price)}</span>
+                        <span className="qty">× {item.qty}</span>
+                      </div>
                     </div>
-                    <div className="mt-3 mt-md-0 col-md-2 col-6  d-flex align-items-center flex-column justify-content-center ">
-                      <h4>Số lượng</h4>
-                      <h6>{item.qty}</h6>
-                    </div>
-                    <div className="mt-3 mt-md-0 col-md-2 col-6  d-flex align-items-center flex-column justify-content-center ">
-                      <h4>Thành tiền</h4>
-                      <h6>{showPrice(item.price)}</h6>
-                    </div>
-                    <div className="mt-3 mt-md-0 col-md-2 col-6 align-items-end  d-flex flex-column justify-content-center ">
-                      <h4>Tổng</h4>
+                    <div className="product-total">
                       <h6>
-                        {item.qty &&
-                          renderPrice(
-                            item.qty,
-                            item.price,
-                            item.loanPrice,
-                            typePay
-                          )}
+                        {item.qty && renderPrice(item.qty, item.price, item.loanPrice, typePay)}
                       </h6>
                     </div>
                   </div>
                 ))}
-              </>
-            )}
-          </div>
-          {/* total */}
-          <div className="col-lg-3 d-flex align-items-end flex-column mt-5 subtotal-order">
-            <table className="table table-bordered">
-              <tbody>
-                <tr>
-                  <td>
-                    <strong>Sản phẩm</strong>
-                  </td>
-                  <td>{showPrice(typePay === "buy" ? prices.itemsPrice : prices.itemsLoanPrice)}</td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>Shipping</strong>
-                  </td>
-                  <td>{showPrice(typePay === "buy" ? prices.shippingPrice : prices.shippingLoanPrice)} </td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>Thuế</strong>
-                  </td>
-                  <td>{showPrice(typePay === "buy" ? prices.taxPrice : prices.taxLoanPrice)}</td>
-                </tr>
-                <tr>
-                  <td>
-                    <strong>Tổng</strong>
-                  </td>
-                  <td>{showPrice(typePay === "buy" ? prices.totalPrice : prices.totalLoanPrice)}</td>
-                </tr>
-              </tbody>
-            </table>
-            {cart.cartItems.length === 0 ? null : (
-              <button type="submit" onClick={() => placeOrderHandler(typePay)}>
-                ĐẶT HÀNG TẬN NƠI
-              </button>
-            )}
-            {error && (
-              <div className="my-3 col-12">
-                <Message variant="alert-danger">{error}</Message>
               </div>
             )}
           </div>
+          
+          <div className="col-lg-4 mt-4 mt-lg-0">
+            <div className="checkout-summary-card">
+              <h4>Tổng kết đơn hàng</h4>
+              <div className="summary-row">
+                <span>Tạm tính</span>
+                <span>{showPrice(typePay === "buy" ? prices.itemsPrice : prices.itemsLoanPrice)}</span>
+              </div>
+              <div className="summary-row">
+                <span>Phí vận chuyển</span>
+                <span>{showPrice(typePay === "buy" ? prices.shippingPrice : prices.shippingLoanPrice)}</span>
+              </div>
+              <div className="summary-row">
+                <span>Thuế (5%)</span>
+                <span>{showPrice(typePay === "buy" ? prices.taxPrice : prices.taxLoanPrice)}</span>
+              </div>
+              <hr />
+              <div className="summary-row total">
+                <span>Tổng cộng</span>
+                <span className="total-price">{showPrice(typePay === "buy" ? prices.totalPrice : prices.totalLoanPrice)}</span>
+              </div>
+              {cart.cartItems.length > 0 && (
+                <button type="submit" className="btn-place-order" onClick={() => placeOrderHandler(typePay)}>
+                  XÁC NHẬN ĐẶT HÀNG
+                </button>
+              )}
+              {error && (
+                <div className="mt-3">
+                  <Message variant="alert-danger">{error}</Message>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
+
+      {showLeaveModal && (
+        <div className="custom-modal-overlay show">
+          <div className="custom-modal-content">
+            <div className="modal-icon">
+              <i className="fas fa-exclamation-triangle"></i>
+            </div>
+            <h4>Khoan đã!</h4>
+            <p>Đơn hàng của bạn chưa được hoàn tất. Bạn có chắc chắn muốn quay lại và hủy tiến trình thanh toán không?</p>
+            <div className="modal-actions">
+              <button className="btn-cancel-modal" onClick={() => setShowLeaveModal(false)}>
+                Tiếp tục thanh toán
+              </button>
+              <button className="btn-confirm-modal" onClick={() => history.push('/cart')}>
+                Đồng ý rời đi
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

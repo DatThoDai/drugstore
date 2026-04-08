@@ -1,50 +1,29 @@
 @media (max-width: 991.98px) {
-  .display-none {
+  .pc-header {
     display: none !important;
   }
-  .search-button {
-    font-size: 10px;
+  .mobile-header {
+    display: block !important;
   }
-  .Login-Register a {
-    font-size: 10px;
+  .profile-container {
+    padding-top: 180px !important;
+    padding-left: 15px;
+    padding-right: 15px;
   }
-  .btn-group button {
-    font-size: 13px;
+  .author-card-profile {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 30px;
   }
-  .badge {
-    top: -10px;
-    padding: 5px;
-    font-size: 7px;
-  }
-  .input-group {
-    height: 30px;
-  }
-  .single-image,
-  .single-image img {
-    height: 400px;
+  .author-card-avatar {
+    margin-bottom: 10px;
+    display: block !important;
   }
   .author-card-avatar img {
-    margin-top: -20%;
-  }
-  .order-box {
-    width: 50px;
-    height: 50px;
-    font-size: 15px;
-  }
-  .order-detail p {
-    font-size: 12px;
-  }
-  .order-detail {
-    padding: 20px 0;
-  }
-  .order-detail h5 {
-    font-size: 13px;
-  }
-  .subtotal-order button {
-    margin-bottom: 30px;
-  }
-  .single-product {
-    margin-top: 20px;
+    margin-top: -40px;
+    width: 70px;
+    height: 70px;
   }
 }
 @media (max-width: 768px) {
@@ -108,7 +87,7 @@
     font-size: 23px;
   }
   .author-card-avatar {
-    display: none;
+    margin-bottom: 10px;
   }
   .order-detail {
     margin-top: 20px;

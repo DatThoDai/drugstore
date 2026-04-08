@@ -33,7 +33,6 @@ public class UserServiceImpl implements UserService {
     private final JWTHelper jwtHelper;
     private final LoginAttemptService loginAttemptService;
     private final TokenSessionService tokenSessionService;
-    private final EmailService emailService;
     private final RedisTemplate<String, String> redisTemplate;
     private final OtpProducer otpProducer;
 

@@ -6,6 +6,7 @@ com\datn\drugstore\dto\CategoryDTO.class
 com\datn\drugstore\exception\NotFoundException.class
 com\datn\drugstore\entity\PdfReview.class
 com\datn\drugstore\service\impl\EmailServiceImp.class
+com\datn\drugstore\utils\VNPayUtils.class
 com\datn\drugstore\entity\ProductReview.class
 com\datn\drugstore\kafka\producer\OtpProducer.class
 com\datn\drugstore\dto\PaymentResultDTO.class
@@ -79,6 +80,7 @@ com\datn\drugstore\mapper\CategoryMapper.class
 com\datn\drugstore\repository\CategoryRepository.class
 com\datn\drugstore\service\LoginAttemptService.class
 com\datn\drugstore\service\impl\LoginAttemptServiceImpl.class
+com\datn\drugstore\config\VNPayConfig.class
 com\datn\drugstore\mapper\PdfMapper.class
 com\datn\drugstore\dto\PdfReviewDTO.class
 com\datn\drugstore\mapper\OrderMapper.class

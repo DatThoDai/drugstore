@@ -74,7 +74,8 @@ public class SecurityConfig {
                                 "/api/category/all/status-detail/**", "/api/category/{id}",
                                 "/api/pdf/all", "/api/pdf/{id}", "/api/pdf/searchpdf/**",
                                 "/api/orders/order-repair",
-                                "/api/config/paypal"
+                                "/api/config/vnpay",
+                                "/api/orders/vnpay-return"
                         ).permitAll()
                         .requestMatchers("POST", "/api/users").permitAll()
                         .requestMatchers("GET", "/api/users").hasRole("ADMIN")
@@ -83,6 +84,7 @@ public class SecurityConfig {
                                 "/api/users/profile", "/api/users/check-session",
                                 "/api/users/{id}", "/api/orders", "/api/orders/{id}",
                                 "/api/orders/{id}/pay",
+                                "/api/orders/{id}/vnpay-url",
                                 "/api/orders/{id}/delivered"
                         ).authenticated()
                         .requestMatchers(

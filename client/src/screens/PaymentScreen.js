@@ -13,7 +13,7 @@ const PaymentScreen = ({ history }) => {
     history.push("/shipping");
   }
 
-  const [paymentMethod, setPaymentMethod] = useState("Paypal");
+  const [paymentMethod, setPaymentMethod] = useState("VNPay");
 
   const dispatch = useDispatch();
 
@@ -38,20 +38,22 @@ const PaymentScreen = ({ history }) => {
             <div className="radio-container">
               <input
                 className="form-check-input"
-                type="checkbox"
-                checked={paymentMethod === "Paypal" ? true : false}
-                onChange={(e) => setPaymentMethod("Paypal")}
+                type="radio"
+                name="paymentMethod"
+                checked={paymentMethod === "VNPay" ? true : false}
+                onChange={() => setPaymentMethod("VNPay")}
               />
               <label className="form-check-label">
-                Thanh toán bằng Paypal hoặc thẻ tín dụng / thẻ ghi nợ
+                Thanh toán qua VNPay
               </label>
             </div>
             <div className="radio-container">
               <input
                 className="form-check-input"
-                type="checkbox"
+                type="radio"
+                name="paymentMethod"
                 checked={paymentMethod === "Credit" ? true : false}
-                onChange={(e) => setPaymentMethod("Credit")}
+                onChange={() => setPaymentMethod("Credit")}
               />
               <label className="form-check-label">
                 Thanh toán khi nhận hàng

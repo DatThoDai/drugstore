@@ -10,6 +10,7 @@ import Category from "./Category";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Slide from "./Slide";
+import FeaturedBrandsSection from "./FeaturedBrandsSection";
 
 const ShopSection = (props) => {
   const { keyword, pagenumber } = props;
@@ -60,9 +61,12 @@ const ShopSection = (props) => {
 
   return (
     <>
-      <div className="container">
-        <Category />
+      <div className="banner-fluid-wrapper">
         <Slide />
+        <FeaturedBrandsSection />
+      </div>
+      <div className="container" style={{ paddingTop: "20px" }}>
+        <Category />
         <div className="section">
           <div className="section-heading">
             <h2>Sản phẩm nổi bật</h2>

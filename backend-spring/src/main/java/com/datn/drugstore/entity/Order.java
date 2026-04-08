@@ -26,7 +26,7 @@ public class Order {
     private User user;
 
     @Column(name = "payment_method", nullable = false)
-    private String paymentMethod = "Paypal";
+    private String paymentMethod = "VNPay";
 
     @Column(name = "tax_price", precision = 10, scale = 2, nullable = false)
     private BigDecimal taxPrice = BigDecimal.ZERO;

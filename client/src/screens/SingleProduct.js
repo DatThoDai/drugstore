@@ -142,12 +142,7 @@ const SingleProduct = ({ history, match }) => {
                       <h6>Giá Mua </h6>
                       <span>{product.price && showPrice(product.price)}</span>
                     </div>
-                    {/* <div className="flex-box d-flex justify-content-between align-items-center">
-                      <h6 style={{ color: "red" }}>Giá Thuê </h6>
-                      <span>
-                        {product.loanPrice && showPrice(product.loanPrice)}
-                      </span>
-                    </div> */}
+
                     <div className="flex-box d-flex justify-content-between align-items-center">
                       <h6>Trạng thái</h6>
                       {product.countInStock > 0 ? (
@@ -217,7 +212,7 @@ const SingleProduct = ({ history, match }) => {
               </div>
             </div>
 
-            {/* RATING */}
+
             <div className="row my-5">
               <div className="col-md-6">
                 <h6 className="mb-3">Đánh giá</h6>

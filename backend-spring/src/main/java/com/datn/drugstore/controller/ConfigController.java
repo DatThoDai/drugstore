@@ -14,12 +14,18 @@ import java.util.Map;
 @RequestMapping("/api/config")
 public class ConfigController {
 
-    @Value("${paypal.client.id:}")
-    private String paypalClientId;
+    @Value("${vnpay.url:}")
+    private String vnpayUrl;
 
-    @GetMapping("/paypal")
-    public ResponseEntity<BaseResponse> getPaypalClientId() {
-        return ResponseFactory.success(Map.of("clientId", paypalClientId));
+    @Value("${vnpay.tmn-code:}")
+    private String vnpayTmnCode;
+
+    @GetMapping("/vnpay")
+    public ResponseEntity<BaseResponse> getVNPayConfig() {
+        return ResponseFactory.success(Map.of(
+                "url", vnpayUrl,
+                "tmnCode", vnpayTmnCode
+        ));
     }
 
 }
