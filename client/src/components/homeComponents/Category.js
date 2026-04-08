@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
-import Dialog from "../Dialog.js";
 
 const Category = () => {
   const [listCategory, setListCategory] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+  const [activeParent, setActiveParent] = useState(null);
+  const [loadingSub, setLoadingSub] = useState(false);
   const history = useHistory();
   const { item } = useParams();
-  const [idShow, setIdShow] = useState(null);
-  const [dialog, setDialog] = useState(false);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -24,34 +24,71 @@ const Category = () => {
     fetchCategories();
   }, []);
 
-  const redirectPage = (href) => {
-    setIdShow(href);
-    setDialog(true);
+  const handleParentClick = async (id) => {
+    // Toggle: click again to close
+    if (activeParent === id) {
+      setActiveParent(null);
+      setSubcategories([]);
+      return;
+    }
+
+    setActiveParent(id);
+    setLoadingSub(true);
+    try {
+      const res = await axios.get(`/api/category/all/status-detail/${id}`);
+      if (res.status === 200) {
+        setSubcategories(res.data.data || []);
+      }
+    } catch (error) {
+      setSubcategories([]);
+    } finally {
+      setLoadingSub(false);
+    }
+  };
+
+  const handleSubClick = (subId) => {
+    history.push(`/category/${subId}`);
   };
 
   return (
-    <>
+    <div className="category-wrapper">
+      {/* Parent categories */}
       <div className="row">
         <ul className="menu">
-          {listCategory.map((i) => (
+          {listCategory.map((cat) => (
             <li
-              key={i.id}
-              className={item === i.id ? `active menu-item` : "menu-item "}
-              onClick={() => redirectPage(i.id)}
+              key={cat.id}
+              className={activeParent === cat.id ? "active menu-item" : "menu-item"}
+              onClick={() => handleParentClick(cat.id)}
             >
-              {i.name}
+              {cat.name}
+              <i className="fas fa-chevron-down"></i>
             </li>
           ))}
         </ul>
       </div>
-      {idShow && (
-        <Dialog
-          isOpenDialog={dialog}
-          setCloseDialog={() => setDialog(false)}
-          idParent={idShow}
-        />
+
+      {/* Subcategories — inline row */}
+      {activeParent && (
+        <div className="subcategory-row">
+          {loadingSub ? (
+            <span className="subcategory-empty">Đang tải...</span>
+          ) : subcategories.length > 0 ? (
+            subcategories.map((sub) => (
+              <span
+                key={sub.id}
+                className={`subcategory-chip${item === (sub.id || sub._id) ? ' active-sub' : ''}`}
+                onClick={() => handleSubClick(sub.id || sub._id)}
+              >
+                {sub.name}
+              </span>
+            ))
+          ) : (
+            <span className="subcategory-empty">Không có danh mục con</span>
+          )}
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Message from "../components/LoadingError/Error";
 import Loading from "../components/LoadingError/Loading";
-import { register } from "../Redux/Actions/userActions";
+import { loginWithGoogle, register } from "../Redux/Actions/userActions";
 import Header from "./../components/Header";
+import GoogleAuthButton from "../components/auth/GoogleAuthButton";
 
 const Register = ({ location, history }) => {
   window.scrollTo(0, 0);
@@ -40,12 +41,16 @@ const Register = ({ location, history }) => {
 
   const userRegister = useSelector((state) => state.userRegister);
   const { error, loading, userInfo } = userRegister;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo: userInfoLogin } = userLogin;
 
   useEffect(() => {
-    if (userInfo) {
+    if (userInfoLogin) {
+      history.push(redirect);
+    } else if (userInfo) {
       history.push(redirect !== "/" ? `/login?redirect=${redirect}` : "/login");
     }
-  }, [userInfo, history, redirect]);
+  }, [userInfo, userInfoLogin, history, redirect]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -53,6 +58,13 @@ const Register = ({ location, history }) => {
     if (err) { setPasswordError(err); return; }
     setPasswordError("");
     dispatch(register(name, email, phone, password));
+  };
+
+  const handleGoogleSuccess = (credentialResponse) => {
+    if (!credentialResponse || !credentialResponse.credential) {
+      return;
+    }
+    dispatch(loginWithGoogle(credentialResponse.credential));
   };
 
   return (
@@ -119,6 +131,10 @@ const Register = ({ location, history }) => {
           )}
 
           <button type="submit" style={{ marginTop: "16px" }}>Đăng ký</button>
+          <GoogleAuthButton
+            onSuccess={handleGoogleSuccess}
+            text="signin_with"
+          />
           <p>
             <Link to={redirect ? `/login?redirect=${redirect}` : "/login"}>
               Tôi đã có tài khoản <strong>Đăng nhập</strong>

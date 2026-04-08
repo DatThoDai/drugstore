@@ -18,6 +18,8 @@ import {
   userLoginReducer,
   userRegisterReducer,
   userUpdateProfileReducer,
+  forgotPasswordReducer,
+  resetPasswordReducer,
 } from "./Reducers/userReducers";
 import {
   orderCreateReducer,
@@ -39,6 +41,8 @@ const reducer = combineReducers({
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
+  forgotPassword: forgotPasswordReducer,
+  resetPassword: resetPasswordReducer,
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,
@@ -49,12 +53,10 @@ const cartItemsFromLocalStorage = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems"))
   : [];
 
-// login
 const userInfoFromLocalStorage = localStorage.getItem("userInfo")
   ? JSON.parse(localStorage.getItem("userInfo"))
   : null;
 
-// shippingAddress
 const shippingAddressFromLocalStorage = localStorage.getItem("shippingAddress")
   ? JSON.parse(localStorage.getItem("shippingAddress"))
   : {};

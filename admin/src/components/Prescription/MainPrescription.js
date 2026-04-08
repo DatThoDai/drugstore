@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import { Link } from "react-router-dom";
 import { Link, useHistory } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -24,8 +23,6 @@ const MainPrescription = () => {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isPayment, setIsPayment] = useState(false);
-  // const MainProducts = () => {
-  //   const dispatch = useDispatch();
 
   const productDelete = useSelector((state) => state.productDelete);
   const { error: errorDelete, success: successDelete } = productDelete;
@@ -163,8 +160,6 @@ const MainPrescription = () => {
       setOrder([]);
       setIsPayment(false)
       toast.success('Kê đơn thành công');
-
-      // history.push('/orders');
     }
   }
 
@@ -210,7 +205,6 @@ const MainPrescription = () => {
             <Loading />
           ) : (
             <div className="row">
-              {/* Products */}
               {isSearch == 0
                 ? productList?.map((item) => (
                     <div
@@ -231,7 +225,6 @@ const MainPrescription = () => {
                           <div className="row">
                             <div
                               onClick={() => handleAddOrder(item)}
-                              // to={`/product/${product.id}/edit`}
                               className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6 w-100"
                             >
                               <i class="fas fa-plus"></i>
@@ -260,7 +253,6 @@ const MainPrescription = () => {
                           <div className="row">
                             <Link
                               onClick={() => handleAddOrder(item)}
-                              // to={`/product/${product.id}/edit`}
                               className="btn btn-sm btn-outline-success p-2 pb-3 col-md-6 w-100"
                             >
                               <i class="fas fa-plus"></i>

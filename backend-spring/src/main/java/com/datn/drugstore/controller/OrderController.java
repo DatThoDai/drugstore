@@ -7,12 +7,16 @@ import com.datn.drugstore.response.BaseResponse;
 import com.datn.drugstore.service.OrderService;
 import com.datn.drugstore.utils.ResponseFactory;
 import jakarta.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +26,9 @@ import java.util.Map;
 public class OrderController {
 
     private final OrderService orderService;
+
+    @Value("${app.url:http://localhost:3000}")
+    private String appUrl;
 
     @PostMapping
     public ResponseEntity<BaseResponse> createOrder(
@@ -49,6 +56,50 @@ public class OrderController {
             @AuthenticationPrincipal User user) {
         OrderDTO order = orderService.getOrderById(id, user.getId());
         return ResponseFactory.success(order);
+    }
+
+    @PostMapping("/{id}/vnpay-url")
+    public ResponseEntity<BaseResponse> createVNPayPaymentUrl(
+            @PathVariable Long id,
+            @AuthenticationPrincipal User currentUser,
+            HttpServletRequest request) {
+        try {
+            if (currentUser == null) {
+                return ResponseFactory.error(401, "Chưa đăng nhập", HttpStatus.UNAUTHORIZED);
+            }
+
+            String ipAddr = request.getHeader("X-Forwarded-For");
+            if (ipAddr == null || ipAddr.isBlank()) {
+                ipAddr = request.getRemoteAddr();
+            }
+            if (ipAddr != null && ipAddr.contains(",")) {
+                ipAddr = ipAddr.split(",")[0].trim();
+            }
+
+            String paymentUrl = orderService.createVNPayPaymentUrl(id, currentUser.getId(), ipAddr);
+            return ResponseFactory.success(Map.of("paymentUrl", paymentUrl));
+        } catch (Exception e) {
+            return ResponseFactory.error(400, e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/vnpay-return")
+    public ResponseEntity<Void> handleVNPayReturn(@RequestParam Map<String, String> queryParams) {
+        String redirectUrl = appUrl + "/?vnpay=failed";
+        try {
+            OrderDTO order = orderService.handleVNPayReturn(queryParams);
+            redirectUrl = appUrl + "/order/" + order.getId() + "?vnpay=success";
+        } catch (Exception e) {
+            String txnRef = queryParams.get("vnp_TxnRef");
+            if (txnRef != null && !txnRef.isBlank()) {
+                String orderId = txnRef.contains("-") ? txnRef.substring(0, txnRef.indexOf("-")) : txnRef;
+                redirectUrl = appUrl + "/order/" + orderId + "?vnpay=failed";
+            }
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(redirectUrl));
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
     }
 
     @PutMapping("/{id}/pay")

@@ -21,11 +21,9 @@ const Dialog = ({ idParent, isOpenDialog, setCloseDialog, onClickOpen }) => {
         `/api/category/all/status-detail/${idParent}`
       );
       if (res.status === 200) {
-        // Extract categories data from BaseResponse wrapper
         setListItem(res.data.data || []);
       }
     } catch (error) {
-      console.error("Error fetching categories:", error);
       setListItem([]);
     } finally {
       setLoading(false);

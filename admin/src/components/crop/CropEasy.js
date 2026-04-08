@@ -19,7 +19,6 @@ const CropEasy = ({
   setFile,
   ...props
 }) => {
-  //   const { setAlert, setLoading } = useAuth();
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [rotation, setRotation] = useState(0);
@@ -30,7 +29,6 @@ const CropEasy = ({
   };
 
   const cropImage = async () => {
-    // setLoading(true);
     try {
       const { file, url } = await getCroppedImg(
         photoURL,
@@ -48,8 +46,6 @@ const CropEasy = ({
     } catch (error) {
       console.log(error);
     }
-
-    // setLoading(false);
   };
   return (
     <>

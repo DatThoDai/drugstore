@@ -1,0 +1,10 @@
+# Sensitive config files - do not commit
+backend-spring/docker-compose.yml
+backend-spring/.env
+Medical-Assisstant/.env
+
+# Build outputs
+backend-spring/target/
+backend-spring/kafka-data/
+admin/build/
+client/build/

@@ -93,7 +93,7 @@ const SinglePdf = () => {
               </div>
             </div>
 
-            {/* RATING */}
+
             <div className="row my-5">
               <div className="col-md-6">
                 <h6 className="mb-3">Đánh giá</h6>

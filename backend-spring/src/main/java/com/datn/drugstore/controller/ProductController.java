@@ -52,6 +52,14 @@ public class ProductController {
         return ResponseFactory.success(products);
     }
 
+    @GetMapping("/low-stock")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<BaseResponse> getLowStockProducts(
+            @RequestParam(required = false) Integer threshold) {
+        List<ProductDTO> products = productService.getLowStockProducts(threshold);
+        return ResponseFactory.success(products);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse> getProductById(@PathVariable Long id) {
         ProductDTO product = productService.getProductById(id);
@@ -96,12 +104,10 @@ public class ProductController {
     public ResponseEntity<BaseResponse> searchProductByOption(@PathVariable String option) {
         List<ProductDTO> products = productService.getAllProductsAdmin();
         if ("old".equals(option)) {
-            // Thêm mới nhất: id giảm dần
             products = products.stream()
                     .sorted((a, b) -> Long.compare(b.getId(), a.getId()))
                     .collect(java.util.stream.Collectors.toList());
         } else {
-            // Thêm cũ nhất: id tăng dần
             products = products.stream()
                     .sorted((a, b) -> Long.compare(a.getId(), b.getId()))
                     .collect(java.util.stream.Collectors.toList());

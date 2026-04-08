@@ -73,6 +73,7 @@ public class ProductServiceImpl implements ProductService {
         product.setDescription(request.getDescription());
         product.setImage(request.getImage());
         product.setCountInStock(request.getCountInStock());
+        product.setLowStockThreshold(request.getLowStockThreshold() != null ? request.getLowStockThreshold() : 10);
         product.setLoanPrice(request.getLoanPrice());
         product.setIsBought(request.getBought());
 
@@ -99,6 +100,7 @@ public class ProductServiceImpl implements ProductService {
         if (request.getDescription() != null) product.setDescription(request.getDescription());
         if (request.getImage() != null) product.setImage(request.getImage());
         if (request.getCountInStock() != null) product.setCountInStock(request.getCountInStock());
+        if (request.getLowStockThreshold() != null) product.setLowStockThreshold(request.getLowStockThreshold());
         if (request.getLoanPrice() != null) product.setLoanPrice(request.getLoanPrice());
         if (request.getCategory() != null) {
             Category category = categoryRepository.findById(request.getCategory())
@@ -158,6 +160,16 @@ public class ProductServiceImpl implements ProductService {
                 .collect(Collectors.toList());
     }
 
+        @Override
+        public List<ProductDTO> getLowStockProducts(Integer threshold) {
+        List<Product> products = threshold != null
+            ? productRepository.findByCountInStockLessThanEqual(threshold)
+            : productRepository.findLowStockProducts();
+        return products.stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+        }
+
     private void updateProductRating(Product product) {
         if (!product.getReviews().isEmpty()) {
             double avgRating = product.getReviews().stream()
@@ -185,7 +197,8 @@ public class ProductServiceImpl implements ProductService {
 
         return new ProductDTO(product.getId(), product.getMa(), product.getName(), product.getImage(),
                 product.getDescription(), reviewDTOs, product.getRating(), product.getNumReviews(),
-                categoryDTO, product.getPrice(), product.getCountInStock(), product.getLoanPrice(),
+            categoryDTO, product.getPrice(), product.getCountInStock(),
+            product.getLowStockThreshold() != null ? product.getLowStockThreshold() : 10, product.getLoanPrice(),
                 product.getIsBought(), product.getCreatedAt(), product.getUpdatedAt());
     }
 

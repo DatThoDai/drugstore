@@ -24,7 +24,6 @@ export const orderListReducer = (state = { orders: [] }, action) => {
   }
 };
 
-// ORDER DETAILS
 export const orderDetailsReducer = (
   state = { loading: true, orderItems: [], shippingAddress: {} },
   action
@@ -41,7 +40,6 @@ export const orderDetailsReducer = (
   }
 };
 
-// ORDER DELIVERED
 export const orderDeliveredReducer = (state = {}, action) => {
   switch (action.type) {
     case ORDER_DELIVERED_REQUEST:

@@ -50,7 +50,6 @@ export const listProducts = () => async (dispatch, getState) => {
   }
 };
 
-// DELETE PRODUCT
 export const deleteProduct = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: PRODUCT_DELETE_REQUEST });
@@ -83,9 +82,8 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
   }
 };
 
-// CREATE PRODUCT
 export const createProduct =
-  (name, price, description, image, countInStock, loanPrice, category, bought) =>
+  (name, price, description, image, countInStock, lowStockThreshold, loanPrice, category, bought) =>
   async (dispatch, getState) => {
     try {
       dispatch({ type: PRODUCT_CREATE_REQUEST });
@@ -108,6 +106,7 @@ export const createProduct =
           description,
           image,
           countInStock,
+          lowStockThreshold,
           loanPrice,
           category,
           bought
@@ -130,7 +129,6 @@ export const createProduct =
     }
   };
 
-// EDIT PRODUCT
 export const editProduct = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_EDIT_REQUEST });
@@ -151,7 +149,6 @@ export const editProduct = (id) => async (dispatch) => {
   }
 };
 
-// UPDATE PRODUCT
 export const updateProduct = (product) => async (dispatch, getState) => {
   try {
     dispatch({ type: PRODUCT_UPDATE_REQUEST });

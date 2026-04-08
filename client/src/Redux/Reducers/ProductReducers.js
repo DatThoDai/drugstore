@@ -14,7 +14,6 @@ import {
   PRODUCT_LIST_SEARCH_FAIL,
 } from "../Constants/ProductConstants";
 
-// PRODUCT LIST
 export const productListReducer = (state = { products: [] }, action) => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:
@@ -49,7 +48,6 @@ export const productListSearchReducer = (state = { products: [] }, action) => {
   }
 };
 
-// SINGLE PRODUCT
 export const productDetailsReducer = (
   state = { product: { reviews: [] } },
   action
@@ -66,7 +64,6 @@ export const productDetailsReducer = (
   }
 };
 
-// PRODUCT REVIEW CREATE
 export const productCreateReviewReducer = (state = {}, action) => {
   switch (action.type) {
     case PRODUCT_CREATE_REVIEW_REQUEST:

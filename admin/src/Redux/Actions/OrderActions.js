@@ -44,7 +44,6 @@ export const listOrders = () => async (dispatch, getState) => {
   }
 };
 
-// ORDER DETAILS
 export const getOrderDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: ORDER_DETAILS_REQUEST });
@@ -76,7 +75,6 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
   }
 };
 
-// ORDER DELIVER
 export const deliverOrder = (order, type) => async (dispatch, getState) => {
   try {
     dispatch({ type: ORDER_DELIVERED_REQUEST });

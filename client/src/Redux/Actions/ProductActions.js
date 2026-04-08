@@ -15,7 +15,6 @@ import {
 } from "../Constants/ProductConstants";
 import { logout } from "./userActions";
 
-// PRODUCT LIST
 export const listProduct =
   (keyword = "", pageNumber = 1) =>
   async (dispatch) => {
@@ -24,7 +23,6 @@ export const listProduct =
       const { data } = await axios.get(
         `/api/products?keyword=${keyword}&pageNumber=${pageNumber}`
       );
-      // Extract products data from BaseResponse wrapper
       const productsData = data.data;
       dispatch({ type: PRODUCT_LIST_SUCCESS, payload: productsData });
     } catch (error) {
@@ -42,7 +40,6 @@ export const listSearch = (type) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_SEARCH_REQUEST });
     const { data } = await axios.get(`/api/products/search/${type}`);
-    // Extract products data from BaseResponse wrapper
     const productsData = data.data;
     dispatch({ type: PRODUCT_LIST_SEARCH_SUCCESS, payload: productsData });
   } catch (error) {
@@ -56,12 +53,10 @@ export const listSearch = (type) => async (dispatch) => {
   }
 };
 
-// SINGLE PRODUCT
 export const listProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST });
     const { data } = await axios.get(`/api/products/${id}`);
-    // Extract product data from BaseResponse wrapper
     const productData = data.data;
     dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: productData });
   } catch (error) {
@@ -75,7 +70,6 @@ export const listProductDetails = (id) => async (dispatch) => {
   }
 };
 
-// PRODUCT REVIEW CREATE
 export const createProductReview =
   (productId, review) => async (dispatch, getState) => {
     try {

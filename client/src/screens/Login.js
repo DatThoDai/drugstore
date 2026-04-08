@@ -4,7 +4,8 @@ import { Link } from "react-router-dom";
 import Message from "../components/LoadingError/Error";
 import Loading from "../components/LoadingError/Loading";
 import Header from "./../components/Header";
-import { login } from "./../Redux/Actions/userActions";
+import { login, loginWithGoogle } from "./../Redux/Actions/userActions";
+import GoogleAuthButton from "../components/auth/GoogleAuthButton";
 
 const Login = ({ location, history }) => {
   window.scrollTo(0, 0);
@@ -26,6 +27,13 @@ const Login = ({ location, history }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(email, password));
+  };
+
+  const handleGoogleSuccess = (credentialResponse) => {
+    if (!credentialResponse || !credentialResponse.credential) {
+      return;
+    }
+    dispatch(loginWithGoogle(credentialResponse.credential));
   };
 
   return (
@@ -51,11 +59,20 @@ const Login = ({ location, history }) => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button type="submit">Đăng nhập ngay</button>
+          <GoogleAuthButton
+            onSuccess={handleGoogleSuccess}
+            text="signin_with"
+          />
           <p>
             <Link
               to={redirect ? `/register?redirect=${redirect}` : "/register"}
             >
               Tạo tài khoản mới
+            </Link>
+          </p>
+          <p style={{ marginTop: "4px" }}>
+            <Link to="/forgot-password" style={{ color: "#6b7280", fontSize: "13px" }}>
+              Quên mật khẩu?
             </Link>
           </p>
         </form>

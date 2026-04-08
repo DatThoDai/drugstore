@@ -21,12 +21,10 @@ public class OrderMapper {
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId());
         
-        // Map user
         if (order.getUser() != null) {
             dto.setUser(UserMapper.toDTO(order.getUser()));
         }
         
-        // Map order items
         if (order.getOrderItems() != null) {
             List<OrderItemDTO> orderItemDTOs = order.getOrderItems().stream()
                     .map(item -> {
@@ -46,7 +44,6 @@ public class OrderMapper {
             dto.setOrderItems(orderItemDTOs);
         }
         
-        // Map shipping address
         if (order.getShippingAddress() != null) {
             ShippingAddressDTO shippingDTO = new ShippingAddressDTO();
             shippingDTO.setAddress(order.getShippingAddress().getAddress());
@@ -56,7 +53,6 @@ public class OrderMapper {
             dto.setShippingAddress(shippingDTO);
         }
         
-        // Map payment result
         if (order.getPaymentResult() != null) {
             PaymentResultDTO paymentDTO = new PaymentResultDTO();
             paymentDTO.setId(order.getPaymentResult().getId());

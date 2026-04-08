@@ -11,7 +11,6 @@ import {
   PDF_LIST_SUCCESS,
 } from "../Constants/PdfConstants";
 
-// PRODUCT LIST
 export const pdfListReducer = (state = { products: [] }, action) => {
   switch (action.type) {
     case PDF_LIST_REQUEST:
@@ -28,7 +27,6 @@ export const pdfListReducer = (state = { products: [] }, action) => {
   }
 };
 
-// SINGLE PRODUCT
 export const pdfDetailsReducer = (
   state = { product: { reviews: [] } },
   action
@@ -45,7 +43,6 @@ export const pdfDetailsReducer = (
   }
 };
 
-// PRODUCT REVIEW CREATE
 export const pdfCreateReviewReducer = (state = {}, action) => {
   switch (action.type) {
     case PDF_CREATE_REVIEW_REQUEST:

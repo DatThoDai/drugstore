@@ -1,6 +1,19 @@
 const path = require('path');
 
 module.exports = {
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+      },
+      '/ai': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        pathRewrite: { '^/ai': '' },
+      },
+    },
+  },
   webpack: {
     configure: (webpackConfig) => {
       // Fix 1: css-loader + webpack5 generates __webpack_exports__.d.e.f.a.u.l.t

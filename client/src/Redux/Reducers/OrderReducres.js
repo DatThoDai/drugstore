@@ -16,7 +16,6 @@ import {
   ORDER_PAY_SUCCESS,
 } from "../Constants/OrderConstants";
 
-// CREATE ORDER
 export const orderCreateReducer = (state = {}, action) => {
   switch (action.type) {
     case ORDER_CREATE_REQUEST:
@@ -32,7 +31,6 @@ export const orderCreateReducer = (state = {}, action) => {
   }
 };
 
-// ORDER DETAILS
 export const orderDetailsReducer = (
   state = { loading: true, orderItems: [], shippingAddress: {} },
   action
@@ -49,7 +47,6 @@ export const orderDetailsReducer = (
   }
 };
 
-// ORDER PAY
 export const orderPayReducer = (state = {}, action) => {
   switch (action.type) {
     case ORDER_PAY_REQUEST:
@@ -65,7 +62,6 @@ export const orderPayReducer = (state = {}, action) => {
   }
 };
 
-// USER ORDERS
 export const orderListMyReducer = (state = { orders: [] }, action) => {
   switch (action.type) {
     case ORDER_LIST_MY_REQUEST:

@@ -67,4 +67,36 @@ public class EmailServiceImp implements EmailService {
             throw new RuntimeException("Lỗi hệ thống khi gửi email", e);
         }
     }
+
+    @Override
+    public void sendOtpEmail(String to, String otp) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom(fromEmail, appName);
+            helper.setTo(to);
+            helper.setSubject("🔐 Mã OTP đặt lại mật khẩu - " + appName);
+
+            String content = """
+                    <div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;padding:24px;border:1px solid #e5e7eb;border-radius:10px;">
+                        <h2 style="color:#15803d;">&#128274; Đặt lại mật khẩu</h2>
+                        <p>Bạn đã yêu cầu đặt lại mật khẩu tại <b>%s</b>.</p>
+                        <p>Mã OTP của bạn là:</p>
+                        <div style="text-align:center;margin:20px 0;">
+                            <span style="font-size:36px;font-weight:bold;letter-spacing:8px;color:#15803d;background:#f0fdf4;padding:12px 24px;border-radius:8px;">%s</span>
+                        </div>
+                        <p style="color:#6b7280;">Mã có hiệu lực trong <b>5 phút</b>. Không chia sẻ mã này cho bất kỳ ai.</p>
+                        <p>Nếu bạn không yêu cầu, vui lòng bỏ qua email này.</p>
+                        <hr style="border:none;border-top:1px solid #e5e7eb;margin:16px 0;"/>
+                        <p style="font-size:12px;color:#9ca3af;">© %s</p>
+                    </div>
+                    """.formatted(appName, otp, appName);
+
+            helper.setText(content, true);
+            mailSender.send(message);
+        } catch (Exception e) {
+            throw new RuntimeException("Không thể gửi email OTP", e);
+        }
+    }
 }

@@ -9,10 +9,10 @@ const ShippingScreen = ({ history }) => {
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
 
-  const [address, setAddress] = useState(shippingAddress.address);
-  const [city, setCity] = useState(shippingAddress.city);
-  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode);
-  const [country, setCountry] = useState(shippingAddress.country);
+  const [address, setAddress] = useState(shippingAddress.address || "");
+  const [city, setCity] = useState(shippingAddress.city || "TP. Hồ Chí Minh");
+  const [postalCode, setPostalCode] = useState(shippingAddress.postalCode || "700000");
+  const [country, setCountry] = useState(shippingAddress.country || "Việt Nam");
 
   const dispatch = useDispatch();
 
@@ -29,36 +29,48 @@ const ShippingScreen = ({ history }) => {
           className="Login col-md-8 col-lg-4 col-11"
           onSubmit={submitHandler}
         >
-          <h6>Địa chỉ giao hàng</h6>
+          <button type="button" className="btn-back" onClick={() => history.push('/cart')}>
+            <i className="fas fa-arrow-left"></i> Quay lại
+          </button>
+          <h6>Thông tin Giao hàng</h6>
+          
           <input
             type="text"
-            placeholder="Enter address"
+            placeholder="Địa chỉ (Số nhà, Tên đường, Phường/Xã...)"
             value={address}
             required
             onChange={(e) => setAddress(e.target.value)}
           />
           <input
             type="text"
-            placeholder="Enter city"
+            placeholder="Tỉnh / Thành phố"
             value={city}
             required
             onChange={(e) => setCity(e.target.value)}
           />
+          
+          <div style={{ width: '100%', textAlign: 'left', marginTop: '15px' }}>
+            <span style={{color: 'var(--color-text-muted)', fontSize: '12px', display: 'block', marginBottom: '-10px'}}>
+              *Gợi ý Mã bưu điện: TP.HCM (700000), Hà Nội (100000). Có thể để mặc định.
+            </span>
+          </div>
           <input
             type="text"
-            placeholder="Enter postal code"
+            placeholder="Mã bưu điện (Zip/Postal Code)"
             value={postalCode}
             required
             onChange={(e) => setPostalCode(e.target.value)}
           />
           <input
             type="text"
-            placeholder="Enter country"
+            placeholder="Quốc gia"
             value={country}
             required
+            readOnly  
+            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text-muted)' }}
             onChange={(e) => setCountry(e.target.value)}
           />
-          <button type="submit">Tiếp tục</button>
+          <button type="submit">Tiếp tục thanh toán</button>
         </form>
       </div>
     </>

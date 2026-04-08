@@ -24,7 +24,6 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
 
     @Override
     public void checkLockStatus(String email) {
-        // Kiểm tra khóa vĩnh viễn
         if (isPermanentlyLocked(email)) {
             throw new AccountLockedException(
                 "Tài khoản đã bị khóa vĩnh viễn do đăng nhập sai quá nhiều lần",
@@ -33,7 +32,6 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
             );
         }
 
-        // Kiểm tra khóa tạm thời
         String lockTimeStr = redisTemplate.opsForValue().get(TEMP_LOCK_PREFIX + email);
         if (lockTimeStr != null) {
             LocalDateTime lockTime = LocalDateTime.parse(lockTimeStr, FORMATTER);
@@ -41,16 +39,13 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
             long secondsRemaining = Duration.between(now, lockTime).getSeconds();
             
             if (secondsRemaining > 0) {
-                // Vẫn còn bị khóa
                 throw new AccountLockedException(
                     String.format("Tài khoản bị khóa tạm thời. Vui lòng thử lại sau %d giây", secondsRemaining),
                     "TEMPORARY",
                     secondsRemaining
                 );
             } else {
-                // Hết thời gian khóa tạm thời
                 redisTemplate.delete(TEMP_LOCK_PREFIX + email);
-                // Không reset attempts - để kiểm tra xem có bị khóa vĩnh viễn không
             }
         }
     }
@@ -61,20 +56,16 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
         String attemptsStr = redisTemplate.opsForValue().get(attemptsKey);
         int attempts = (attemptsStr != null) ? Integer.parseInt(attemptsStr) + 1 : 1;
         
-        // Lưu attempts với TTL 24 giờ
         redisTemplate.opsForValue().set(attemptsKey, String.valueOf(attempts), 24, TimeUnit.HOURS);
 
         if (attempts >= MAX_ATTEMPT) {
             String tempLockKey = TEMP_LOCK_PREFIX + email;
             
-            // Kiểm tra xem đã từng bị khóa tạm thời chưa
             if (redisTemplate.hasKey(tempLockKey) || attempts > MAX_ATTEMPT) {
-                // Đã bị khóa tạm thời rồi, lần này khóa vĩnh viễn
                 redisTemplate.opsForValue().set(PERM_LOCK_PREFIX + email, "true");
                 redisTemplate.delete(tempLockKey);
                 redisTemplate.delete(attemptsKey);
             } else {
-                // Lần đầu đăng nhập sai 3 lần - khóa tạm thời 15 phút
                 LocalDateTime unlockTime = LocalDateTime.now().plusSeconds(LOCK_TIME_DURATION);
                 redisTemplate.opsForValue().set(
                     tempLockKey, 
@@ -88,10 +79,8 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
 
     @Override
     public void loginSucceeded(String email) {
-        // Reset tất cả khi đăng nhập thành công
         redisTemplate.delete(ATTEMPTS_PREFIX + email);
         redisTemplate.delete(TEMP_LOCK_PREFIX + email);
-        // Không xóa permanent lock vì cần admin can thiệp
     }
 
     @Override

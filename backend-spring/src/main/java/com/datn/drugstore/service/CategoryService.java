@@ -7,7 +7,6 @@ import com.datn.drugstore.request.UpdateCategoryRequest;
 import java.util.List;
 
 public interface CategoryService {
-    // Category methods
     List<CategoryDTO> getAllCategories();
     List<CategoryDTO> getAllCategoriesWithShow();
     List<CategoryDTO> getAllChildCategories();

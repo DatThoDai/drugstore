@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  medical-assistant:
+    build: .
+    container_name: medical-assistant
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    restart: unless-stopped

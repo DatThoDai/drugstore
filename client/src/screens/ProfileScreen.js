@@ -6,6 +6,7 @@ import { getUserDetails } from "../Redux/Actions/userActions";
 import Orders from "./../components/profileComponents/Orders";
 import moment from "moment";
 import { listMyOrders } from "../Redux/Actions/OrderActions";
+import Footer from "../components/Footer";
 
 const ProfileScreen = () => {
   window.scrollTo(0, 0);
@@ -25,9 +26,17 @@ const ProfileScreen = () => {
   return (
     <>
       <Header />
-      <div className="container mt-lg-5 mt-3">
+      <div className="container profile-container">
+        {/* Page heading */}
+        <div className="section-heading" style={{ marginBottom: "32px" }}>
+          <h2>Trang cá nhân</h2>
+          <p>Quản lý thông tin tài khoản và theo dõi đơn hàng của bạn</p>
+          <div className="line"></div>
+        </div>
+
         <div className="row align-items-start">
-          <div className="col-lg-4 p-0 shadow ">
+          {/* Sidebar */}
+          <div className="col-lg-4 p-0 profile-sidebar">
             <div className="author-card pb-0 pb-md-3">
               <div className="author-card-cover"></div>
               <div className="author-card-profile row">
@@ -40,6 +49,7 @@ const ProfileScreen = () => {
                   </h5>
                   <span className="author-card-position">
                     <>
+                      <i className="fas fa-calendar-alt" style={{ marginRight: "6px", fontSize: "12px" }}></i>
                       Đã đăng ký ngày {moment(userInfo.createdAt).format("LL")}
                     </>
                   </span>
@@ -47,15 +57,15 @@ const ProfileScreen = () => {
               </div>
             </div>
             <div className="wizard pt-3 ">
-              <div class="d-flex align-items-start">
+              <div className="d-flex align-items-start">
                 <div
-                  class="nav align-items-start flex-column col-12 nav-pills me-3 "
+                  className="nav align-items-start flex-column col-12 nav-pills me-3 "
                   id="v-pills-tab"
                   role="tablist"
                   aria-orientation="vertical"
                 >
                   <button
-                    class="nav-link active"
+                    className="nav-link active"
                     id="v-pills-home-tab"
                     data-bs-toggle="pill"
                     data-bs-target="#v-pills-home"
@@ -64,10 +74,11 @@ const ProfileScreen = () => {
                     aria-controls="v-pills-home"
                     aria-selected="true"
                   >
+                    <i className="fas fa-user" style={{ fontSize: "14px" }}></i>
                     Thông tin cá nhân
                   </button>
                   <button
-                    class="nav-link d-flex justify-content-between"
+                    className="nav-link d-flex justify-content-between"
                     id="v-pills-profile-tab"
                     data-bs-toggle="pill"
                     data-bs-target="#v-pills-profile"
@@ -76,7 +87,10 @@ const ProfileScreen = () => {
                     aria-controls="v-pills-profile"
                     aria-selected="false"
                   >
-                    Danh sách đơn hàng
+                    <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <i className="fas fa-shopping-bag" style={{ fontSize: "14px" }}></i>
+                      Danh sách đơn hàng
+                    </span>
                     <span className="badge2">{orders ? orders.length : 0}</span>
                   </button>
                 </div>
@@ -86,11 +100,11 @@ const ProfileScreen = () => {
 
           {/* panels */}
           <div
-            class="tab-content col-lg-8 pb-5 pt-lg-0 pt-3"
+            className="tab-content col-lg-8 pb-5 pt-lg-0 pt-3"
             id="v-pills-tabContent"
           >
             <div
-              class="tab-pane fade show active"
+              className="tab-pane fade show active"
               id="v-pills-home"
               role="tabpanel"
               aria-labelledby="v-pills-home-tab"
@@ -98,7 +112,7 @@ const ProfileScreen = () => {
               <ProfileTabs />
             </div>
             <div
-              class="tab-pane fade"
+              className="tab-pane fade"
               id="v-pills-profile"
               role="tabpanel"
               aria-labelledby="v-pills-profile-tab"
@@ -108,6 +122,7 @@ const ProfileScreen = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

@@ -17,4 +17,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.category.id = :categoryId")
     List<Product> findByCategoryId(@Param("categoryId") Long categoryId);
 
+    @Query("SELECT p FROM Product p WHERE p.countInStock <= COALESCE(p.lowStockThreshold, 10)")
+    List<Product> findLowStockProducts();
+
+    List<Product> findByCountInStockLessThanEqual(Integer threshold);
+
 }

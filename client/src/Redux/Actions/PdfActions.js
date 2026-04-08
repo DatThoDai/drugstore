@@ -12,12 +12,10 @@ import {
 } from "../Constants/PdfConstants";
 import { logout } from "./userActions";
 
-// PDF LIST
 export const listPdf = () => async (dispatch) => {
   try {
     dispatch({ type: PDF_LIST_REQUEST });
     const { data } = await axios.get(`/api/pdf/all`);
-    // Extract pdfs data from BaseResponse wrapper
     const pdfsData = data.data;
     dispatch({ type: PDF_LIST_SUCCESS, payload: pdfsData });
   } catch (error) {
@@ -31,12 +29,10 @@ export const listPdf = () => async (dispatch) => {
   }
 };
 
-// SINGLE PDF
 export const listPdfDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PDF_DETAILS_REQUEST });
     const { data } = await axios.get(`/api/pdf/${id}`);
-    // Extract pdf data from BaseResponse wrapper
     const pdfData = data.data;
     dispatch({ type: PDF_DETAILS_SUCCESS, payload: pdfData });
   } catch (error) {
@@ -50,7 +46,6 @@ export const listPdfDetails = (id) => async (dispatch) => {
   }
 };
 
-// PDF REVIEW CREATE
 export const createPdfReview =
   (productId, review) => async (dispatch, getState) => {
     try {

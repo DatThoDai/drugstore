@@ -13,11 +13,16 @@ import {
   USER_UPDATE_PROFILE_FAIL,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_FAIL,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAIL,
 } from "../Constants/UserContants";
 import axios from "axios";
 import { ORDER_LIST_MY_RESET } from "../Constants/OrderConstants";
 
-// LOGIN
 export const login = (email, password) => async (dispatch) => {
   try {
     dispatch({ type: USER_LOGIN_REQUEST });
@@ -34,7 +39,6 @@ export const login = (email, password) => async (dispatch) => {
       config
     );
     
-    // Extract user data from BaseResponse wrapper
     const userData = data.data;
     dispatch({ type: USER_LOGIN_SUCCESS, payload: userData });
 
@@ -50,7 +54,36 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-// LOGOUT
+export const loginWithGoogle = (idToken) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_LOGIN_REQUEST });
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/users/google-login`,
+      { idToken },
+      config
+    );
+
+    const userData = data.data;
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: userData });
+    localStorage.setItem("userInfo", JSON.stringify(userData));
+  } catch (error) {
+    dispatch({
+      type: USER_LOGIN_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
@@ -58,7 +91,6 @@ export const logout = () => (dispatch) => {
   dispatch({ type: ORDER_LIST_MY_RESET });
 };
 
-// REGISTER
 export const register = (name, email, phone, password) => async (dispatch) => {
   try {
     dispatch({ type: USER_REGISTER_REQUEST });
@@ -75,10 +107,8 @@ export const register = (name, email, phone, password) => async (dispatch) => {
       config
     );
     
-    // Extract user data from BaseResponse wrapper
     const userData = data.data;
     dispatch({ type: USER_REGISTER_SUCCESS, payload: userData });
-    // Không tự đăng nhập — user phải đăng nhập thủ công sau khi đăng ký
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
@@ -90,7 +120,6 @@ export const register = (name, email, phone, password) => async (dispatch) => {
   }
 };
 
-// USER DETAILS
 export const getUserDetails = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_DETAILS_REQUEST });
@@ -106,7 +135,6 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 
     const { data } = await axios.get(`/api/users/${id}`, config);
     
-    // Extract user data from BaseResponse wrapper
     const userData = data.data;
     dispatch({ type: USER_DETAILS_SUCCESS, payload: userData });
   } catch (error) {
@@ -124,7 +152,6 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
   }
 };
 
-// UPDATE PROFILE
 export const updateUserProfile = (user) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_UPDATE_PROFILE_REQUEST });
@@ -142,7 +169,6 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
 
     const { data } = await axios.put(`/api/users/profile`, user, config);
     
-    // Extract user data from BaseResponse wrapper
     const userData = data.data;
     dispatch({ type: USER_UPDATE_PROFILE_SUCCESS, payload: userData });
     dispatch({ type: USER_LOGIN_SUCCESS, payload: userData });
@@ -159,6 +185,34 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
     dispatch({
       type: USER_UPDATE_PROFILE_FAIL,
       payload: message,
+    });
+  }
+};
+
+export const forgotPassword = (email) => async (dispatch) => {
+  try {
+    dispatch({ type: FORGOT_PASSWORD_REQUEST });
+    await axios.post("/api/users/forgot-password", { email });
+    dispatch({ type: FORGOT_PASSWORD_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: FORGOT_PASSWORD_FAIL,
+      payload:
+        error.response?.data?.message || error.message,
+    });
+  }
+};
+
+export const resetPassword = (email, otp, newPassword) => async (dispatch) => {
+  try {
+    dispatch({ type: RESET_PASSWORD_REQUEST });
+    await axios.post("/api/users/reset-password", { email, otp, newPassword });
+    dispatch({ type: RESET_PASSWORD_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: RESET_PASSWORD_FAIL,
+      payload:
+        error.response?.data?.message || error.message,
     });
   }
 };

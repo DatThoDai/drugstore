@@ -1,11 +1,8 @@
-import { Viewer } from "@react-pdf-viewer/core"; // install this library
-// Plugins
-import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout"; // install this library
-// Import the styles
+import { Viewer } from "@react-pdf-viewer/core";
+import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
-// Worker
-import { Worker } from "@react-pdf-viewer/core"; // install this library
+import { Worker } from "@react-pdf-viewer/core";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,7 +22,6 @@ const PDF = () => {
   return (
     <>
       <div className="pdf-container">
-        {/* show pdf conditionally (if we have one)  */}
         {product.file && (
           <>
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
@@ -37,7 +33,6 @@ const PDF = () => {
           </>
         )}
 
-        {/* if we dont have pdf or viewPdf state is null */}
         {!product.file && <>No pdf file selected</>}
       </div>
     </>

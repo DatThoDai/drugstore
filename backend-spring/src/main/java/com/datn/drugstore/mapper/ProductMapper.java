@@ -25,18 +25,15 @@ public class ProductMapper {
         dto.setNumReviews(product.getNumReviews());
         dto.setPrice(product.getPrice());
         dto.setCountInStock(product.getCountInStock());
+        dto.setLowStockThreshold(product.getLowStockThreshold() != null ? product.getLowStockThreshold() : 10);
         dto.setLoanPrice(product.getLoanPrice());
         dto.setIsBought(product.getIsBought());
         dto.setCreatedAt(product.getCreatedAt());
         dto.setUpdatedAt(product.getUpdatedAt());
         
-        // Map category if exists
         if (product.getCategory() != null) {
             dto.setCategory(CategoryMapper.toDTO(product.getCategory()));
         }
-        
-        // Map reviews if needed (lazy loaded, be careful)
-        // dto.setReviews(...);
         
         return dto;
     }

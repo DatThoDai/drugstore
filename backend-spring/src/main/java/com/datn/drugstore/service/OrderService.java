@@ -11,6 +11,8 @@ public interface OrderService {
     List<OrderDTO> getAllOrders();
     List<OrderDTO> getUserOrders(Long userId);
     OrderDTO getOrderById(Long id, Long userId);
+    String createVNPayPaymentUrl(Long id, Long userId, String ipAddr);
+    OrderDTO handleVNPayReturn(Map<String, String> queryParams);
     OrderDTO markOrderAsPaid(Long id, Map<String, Object> paymentData);
     OrderDTO markOrderAsDelivered(Long id, String status);
     List<OrderDTO> searchOrdersByUserEmail(String email);

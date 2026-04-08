@@ -14,7 +14,7 @@ const Footer = () => {
 
         {/* Payment methods */}
         <div className="footer-bottom">
-          <span style={{ color: "rgba(255,255,255,0.6)", fontSize: "13px", fontFamily: "'Nunito Sans', sans-serif" }}>
+          <span style={{ fontSize: "14px", fontFamily: "'Nunito Sans', sans-serif", fontWeight: "600", color: "var(--color-text)" }}>
             Thanh toán an toàn:
           </span>
           <div className="card-name">
@@ -24,7 +24,7 @@ const Footer = () => {
             <img alt="visa" src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" />
           </div>
           <div className="card-name">
-            <img alt="paypal" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/PayPal.svg/200px-PayPal.svg.png" />
+            <span style={{ fontWeight: 700, fontSize: "12px", color: "var(--color-text)" }}>VNPay</span>
           </div>
           <div className="card-name">
             <img alt="amex" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/American_Express_logo.svg/200px-American_Express_logo.svg.png" />
@@ -32,7 +32,7 @@ const Footer = () => {
         </div>
 
         {/* Copyright */}
-        <p style={{ textAlign: "center", marginTop: "20px", color: "rgba(255,255,255,0.45)", fontSize: "12px", fontFamily: "'Nunito Sans', sans-serif" }}>
+        <p style={{ textAlign: "center", marginTop: "20px", color: "var(--color-text-muted)", fontSize: "13px", fontFamily: "'Nunito Sans', sans-serif" }}>
           &copy; {new Date().getFullYear()} DrugStore. All rights reserved.
         </p>
       </div>

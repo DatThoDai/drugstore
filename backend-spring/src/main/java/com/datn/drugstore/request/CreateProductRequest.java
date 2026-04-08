@@ -26,6 +26,8 @@ public class CreateProductRequest {
     @NotNull(message = "Count in stock is required")
     private Integer countInStock;
 
+    private Integer lowStockThreshold;
+
     private BigDecimal loanPrice;
 
     private Long category;

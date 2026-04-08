@@ -3,6 +3,7 @@ package com.datn.drugstore.controller;
 import com.datn.drugstore.dto.UserDTO;
 import com.datn.drugstore.entity.User;
 import com.datn.drugstore.exception.InvalidCredentialsException;
+import com.datn.drugstore.request.GoogleLoginRequest;
 import com.datn.drugstore.request.LoginRequest;
 import com.datn.drugstore.request.UpdateProfileRequest;
 import com.datn.drugstore.response.BaseResponse;
@@ -64,20 +65,38 @@ public class UserController {
         }
     }
 
-    // Register endpoint - POST /api/users
-    @PostMapping
-    public ResponseEntity<BaseResponse> registerCompat(@Valid @RequestBody RegisterRequest registerRequest) {
-        UserDTO userDTO = userService.register(registerRequest);
-        registrationProducer.sendRegistrationEvent(userDTO.getEmail(), userDTO.getName());
-        return ResponseFactory.success(userDTO, "Đăng ký thành công");
+    @PostMapping("/google-login")
+    public ResponseEntity<BaseResponse> loginWithGoogle(@Valid @RequestBody GoogleLoginRequest request) {
+        UserDTO userDTO = userService.loginWithGoogle(request.getIdToken());
+        return ResponseFactory.success(userDTO, "Đăng nhập Google thành công");
     }
 
-    // Register endpoint - POST /api/users/register (Alternative)
+    @PostMapping
+    public ResponseEntity<BaseResponse> registerCompat(@Valid @RequestBody RegisterRequest registerRequest) {
+        try {
+            UserDTO userDTO = userService.register(registerRequest);
+            registrationProducer.sendRegistrationEvent(userDTO.getEmail(), userDTO.getName());
+            return ResponseFactory.success(userDTO, "Đăng ký thành công");
+        } catch (RuntimeException e) {
+            BaseResponse res = new BaseResponse();
+            res.setCode(409);
+            res.setMessage(e.getMessage());
+            return ResponseEntity.status(409).body(res);
+        }
+    }
+
     @PostMapping("/register")
     public ResponseEntity<BaseResponse> register(@Valid @RequestBody RegisterRequest registerRequest) {
-        UserDTO userDTO = userService.register(registerRequest);
-        registrationProducer.sendRegistrationEvent(userDTO.getEmail(), userDTO.getName());
-        return ResponseFactory.success(userDTO, "Đăng ký thành công");
+        try {
+            UserDTO userDTO = userService.register(registerRequest);
+            registrationProducer.sendRegistrationEvent(userDTO.getEmail(), userDTO.getName());
+            return ResponseFactory.success(userDTO, "Đăng ký thành công");
+        } catch (RuntimeException e) {
+            BaseResponse res = new BaseResponse();
+            res.setCode(409);
+            res.setMessage(e.getMessage());
+            return ResponseEntity.status(409).body(res);
+        }
     }
 
     @GetMapping("/profile")
@@ -86,16 +105,13 @@ public class UserController {
         return ResponseFactory.success(userDTO);
     }
 
-    // Endpoint nhẹ để frontend polling kiểm tra session còn hợp lệ không
     @GetMapping("/check-session")
     public ResponseEntity<BaseResponse> checkSession(@AuthenticationPrincipal User user) {
         return ResponseFactory.success(null, "ok");
     }
 
-    // Get user by ID
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse> getUserById(@PathVariable Long id, @AuthenticationPrincipal User user) {
-        // Only allow users to view their own profile or admin to view any profile
         if (!user.getId().equals(id) && !user.getIsAdmin()) {
             return ResponseFactory.forbidden("Bạn không có quyền xem thông tin này");
         }
@@ -131,6 +147,44 @@ public class UserController {
             return ResponseFactory.success(user.get());
         }
         return ResponseFactory.notFound("Không tìm thấy user");
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<BaseResponse> forgotPassword(@RequestBody Map<String, String> body) {
+        try {
+            String email = body.get("email");
+            if (email == null || email.isBlank()) {
+                BaseResponse res = new BaseResponse();
+                res.setCode(400); res.setMessage("Email không được để trống.");
+                return ResponseEntity.badRequest().body(res);
+            }
+            userService.sendForgotPasswordOtp(email.trim().toLowerCase());
+            return ResponseFactory.success(null, "Đã gửi mã OTP về email của bạn.");
+        } catch (RuntimeException e) {
+            BaseResponse res = new BaseResponse();
+            res.setCode(404); res.setMessage(e.getMessage());
+            return ResponseEntity.status(404).body(res);
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<BaseResponse> resetPassword(@RequestBody Map<String, String> body) {
+        try {
+            String email = body.get("email");
+            String otp   = body.get("otp");
+            String newPassword = body.get("newPassword");
+            if (email == null || otp == null || newPassword == null) {
+                BaseResponse res = new BaseResponse();
+                res.setCode(400); res.setMessage("Thiếu thông tin.");
+                return ResponseEntity.badRequest().body(res);
+            }
+            userService.resetPassword(email.trim().toLowerCase(), otp.trim(), newPassword);
+            return ResponseFactory.success(null, "Đặt lại mật khẩu thành công.");
+        } catch (RuntimeException e) {
+            BaseResponse res = new BaseResponse();
+            res.setCode(400); res.setMessage(e.getMessage());
+            return ResponseEntity.status(400).body(res);
+        }
     }
 
 }

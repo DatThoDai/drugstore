@@ -57,7 +57,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryDTO createCategory(CreateCategoryRequest request) {
-        // Check if category name exists
         List<Category> existing = categoryRepository.findAll().stream()
                 .filter(c -> c.getName().equals(request.getName()))
                 .collect(Collectors.toList());

@@ -34,4 +34,22 @@ public class EmailConsumer {
             e.printStackTrace();
         }
     }
+
+    @KafkaListener(topics = "otp-email", groupId = "drugstore-email-group")
+    public void consumeOtpEvent(String message) {
+        try {
+            System.out.println("Received OTP event: " + message);
+
+            Map<String, String> data = objectMapper.readValue(message, Map.class);
+            String email = data.get("email");
+            String otp   = data.get("otp");
+
+            emailService.sendOtpEmail(email, otp);
+
+            System.out.println("OTP email sent successfully to: " + email);
+        } catch (Exception e) {
+            System.err.println("Error processing OTP event: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 }

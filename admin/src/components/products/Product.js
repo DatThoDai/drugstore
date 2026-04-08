@@ -7,6 +7,9 @@ import { toast } from "react-toastify";
 const Product = (props) => {
   const { product } = props;
   const dispatch = useDispatch();
+  const lowStockThreshold = Number(product.lowStockThreshold ?? 10);
+  const countInStock = Number(product.countInStock ?? 0);
+  const isLowStock = countInStock <= lowStockThreshold;
 
   const deletehandler = (id) => {
     toast(
@@ -35,6 +38,11 @@ const Product = (props) => {
             <Link to="#" className="title text-truncate">
               {product.name} - {product.ma}
             </Link>
+            {isLowStock && (
+              <div className="mb-2">
+                <span className="badge bg-danger">Sắp hết hàng ({countInStock})</span>
+              </div>
+            )}
             <div className="price mb-2">{product.price}VND</div>
             <div className="row">
               <Link

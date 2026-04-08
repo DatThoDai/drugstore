@@ -10,6 +10,8 @@ import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,11 +19,13 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
-    // PRODUCER CONFIG
+    @Value("${KAFKA_BOOTSTRAP_SERVERS:localhost:9094}")
+    private String bootstrapServers;
+
     @Bean
     public ProducerFactory<String, String> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9094");
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);
@@ -32,11 +36,10 @@ public class KafkaConfig {
         return new KafkaTemplate<>(producerFactory());
     }
 
-    // CONSUMER CONFIG
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9094");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "drugstore-email-group");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);

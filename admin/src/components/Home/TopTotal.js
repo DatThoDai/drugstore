@@ -1,7 +1,7 @@
 import React from "react";
 
 const TopTotal = (props) => {
-  const { orders, products } = props;
+  const { orders, products, lowStockCount } = props;
   let totalSale = 0;
   if (orders) {
     orders.map((order) =>
@@ -55,6 +55,9 @@ const TopTotal = (props) => {
           </div>
           <div className="stat-label">Sản phẩm</div>
           <div className="stat-value">{totalProducts}</div>
+          <div style={{ fontSize: "0.78rem", marginTop: "6px", opacity: 0.8 }}>
+            {lowStockCount || 0} sắp hết hàng
+          </div>
         </div>
       </div>
     </div>

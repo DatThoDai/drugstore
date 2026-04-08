@@ -17,13 +17,13 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
 import NotFound from "./screens/NotFound";
 import PrivateRouter from "./PrivateRouter";
-import PdfFileScreen from "./screens/PdfFileScreen";
-import SinglePdf from "./screens/SinglePdf";
-import PDF from "./components/PDF";
+
 import SearchProduct from "./screens/SearchProduct";
 import FavoriteScreen from "./screens/FavoriteScreen";
+import ForgotPassword from "./screens/ForgotPassword";
+import MedicalAIChatbot from "./components/MedicalAIChatbot";
 
-const POLL_INTERVAL = 30000; // 30 giây
+const POLL_INTERVAL = 30000;
 
 const App = () => {
   const handleSessionExpired = (message) => {
@@ -101,6 +101,7 @@ const App = () => {
         <PrivateRouter path="/search/:param" component={SearchProduct} />
         <Route path="/login" component={Login} />
         <Route path="/register" component={Register} />
+        <Route path="/forgot-password" component={ForgotPassword} />
         <PrivateRouter path="/profile" component={ProfileScreen} />
         <Route path="/cart/:id?" component={CartScreen} />
         <Route path="/favorite/:id?" component={FavoriteScreen} />
@@ -110,6 +111,7 @@ const App = () => {
         <PrivateRouter path="/order/:id" component={OrderScreen} />
         <Route path="*" component={NotFound} />
       </Switch>
+      <MedicalAIChatbot />
     </Router>
   );
 };

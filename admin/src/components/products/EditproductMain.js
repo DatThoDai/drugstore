@@ -28,6 +28,7 @@ const EditProductMain = (props) => {
   const [price, setPrice] = useState(0);
   const [images, setImages] = useState(null);
   const [countInStock, setCountInStock] = useState(0);
+  const [lowStockThreshold, setLowStockThreshold] = useState(10);
   const [description, setDescription] = useState("");
   const [loanPrice, setLoanPrice] = useState(0);
   const [category, setCategory] = useState("");
@@ -91,6 +92,7 @@ const EditProductMain = (props) => {
       setName(product.name);
       setDescription(product.description);
       setCountInStock(product.countInStock);
+      setLowStockThreshold(product.lowStockThreshold ?? 10);
       setPrice(product.price);
       setLoanPrice(product.loanPrice);
       setCategory(product.category?.id ?? product.category ?? "");
@@ -112,6 +114,7 @@ const EditProductMain = (props) => {
           description,
           image,
           countInStock,
+          lowStockThreshold,
           loanPrice,
           category: categoryId,
           bought
@@ -126,6 +129,7 @@ const EditProductMain = (props) => {
           description,
           image : preview,
           countInStock,
+          lowStockThreshold,
           loanPrice,
           category: categoryId,
           bought
@@ -223,6 +227,20 @@ const EditProductMain = (props) => {
                           required
                           value={price}
                           onChange={(e) => setPrice(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <label htmlFor="product_threshold" className="form-label">
+                          Ngưỡng cảnh báo tồn kho
+                        </label>
+                        <input
+                          type="number"
+                          placeholder="Type here"
+                          className="form-control"
+                          id="product_threshold"
+                          min="0"
+                          value={lowStockThreshold}
+                          onChange={(e) => setLowStockThreshold(e.target.value)}
                         />
                       </div>
                       <div className="mb-4">

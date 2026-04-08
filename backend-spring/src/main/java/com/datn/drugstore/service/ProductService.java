@@ -19,4 +19,5 @@ public interface ProductService {
     void addProductReview(Long productId, ProductReviewRequest request, User user);
     List<ProductDTO> searchProducts(String type);
     List<ProductDTO> getProductsByCategory(Long categoryId);
+    List<ProductDTO> getLowStockProducts(Integer threshold);
 }

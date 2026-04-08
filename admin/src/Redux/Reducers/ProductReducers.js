@@ -18,7 +18,6 @@ import {
   PRODUCT_UPDATE_SUCCESS,
 } from "../Constants/ProductConstants";
 
-// ALL PRODUCTS
 export const productListReducer = (state = { products: [] }, action) => {
   switch (action.type) {
     case PRODUCT_LIST_REQUEST:
@@ -32,7 +31,6 @@ export const productListReducer = (state = { products: [] }, action) => {
   }
 };
 
-// DELETE PRODUCT
 export const productDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case PRODUCT_DELETE_REQUEST:
@@ -46,7 +44,6 @@ export const productDeleteReducer = (state = {}, action) => {
   }
 };
 
-// DELETE PRODUCT
 export const productCreateReducer = (state = {}, action) => {
   switch (action.type) {
     case PRODUCT_CREATE_REQUEST:
@@ -62,7 +59,6 @@ export const productCreateReducer = (state = {}, action) => {
   }
 };
 
-// EDIT PRODUCT
 export const productEditReducer = (
   state = { product: { reviews: [] } },
   action
@@ -79,7 +75,6 @@ export const productEditReducer = (
   }
 };
 
-// UPDATE PRODUCT
 export const productUpdateReducer = (state = { product: {} }, action) => {
   switch (action.type) {
     case PRODUCT_UPDATE_REQUEST:

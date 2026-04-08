@@ -6,7 +6,6 @@ const OrderDetailProducts = (props) => {
   const { order, loading } = props;
 
   if (!loading) {
-    // Calculate Price
     const addDecimals = (num) => {
       return (Math.round(num * 100) / 100).toFixed(2);
     };

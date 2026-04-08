@@ -18,7 +18,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { URL } from "../Url";
 
-// LOGIN
 export const login = (email, password) => async (dispatch) => {
   const ToastObjects = {
     pauseOnFocusLoss: false,
@@ -64,14 +63,12 @@ export const login = (email, password) => async (dispatch) => {
   }
 };
 
-// LOGOUT
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_LIST_RESET });
 };
 
-// ALL USER
 export const listUser = () => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_LIST_REQUEST });
@@ -103,7 +100,6 @@ export const listUser = () => async (dispatch, getState) => {
   }
 };
 
-// CREATE USER
 export const createUser =
   (name, email, password) =>
     async (dispatch, getState) => {
@@ -142,7 +138,6 @@ export const createUser =
 
     };
 
-// DELETE USER
 export const deleteUser = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: USER_DELETE_REQUEST });
