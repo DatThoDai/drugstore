@@ -25,6 +25,7 @@ public class ProductMapper {
         dto.setNumReviews(product.getNumReviews());
         dto.setPrice(product.getPrice());
         dto.setCountInStock(product.getCountInStock());
+        dto.setLowStockThreshold(product.getLowStockThreshold() != null ? product.getLowStockThreshold() : 10);
         dto.setLoanPrice(product.getLoanPrice());
         dto.setIsBought(product.getIsBought());
         dto.setCreatedAt(product.getCreatedAt());

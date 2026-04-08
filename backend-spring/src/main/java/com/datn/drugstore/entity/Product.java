@@ -51,6 +51,9 @@ public class Product {
     @Column(name = "count_in_stock", nullable = false)
     private Integer countInStock = 0;
 
+    @Column(name = "low_stock_threshold")
+    private Integer lowStockThreshold = 10;
+
     @Column(name = "loan_price", precision = 10, scale = 2)
     private BigDecimal loanPrice = BigDecimal.ZERO;
 

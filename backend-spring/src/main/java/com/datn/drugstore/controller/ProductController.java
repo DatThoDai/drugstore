@@ -52,6 +52,14 @@ public class ProductController {
         return ResponseFactory.success(products);
     }
 
+    @GetMapping("/low-stock")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<BaseResponse> getLowStockProducts(
+            @RequestParam(required = false) Integer threshold) {
+        List<ProductDTO> products = productService.getLowStockProducts(threshold);
+        return ResponseFactory.success(products);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse> getProductById(@PathVariable Long id) {
         ProductDTO product = productService.getProductById(id);

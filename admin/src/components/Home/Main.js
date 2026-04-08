@@ -17,6 +17,9 @@ const Main = () => {
   const { loading, error, orders } = orderList;
   const productList = useSelector((state) => state.productList);
   const { products } = productList;
+  const lowStockCount = products
+    ? products.filter((product) => Number(product.countInStock ?? 0) <= Number(product.lowStockThreshold ?? 10)).length
+    : 0;
   const { userInfo } = useSelector((state) => state.userLogin);
   const [data, setData] = useState([]);
   const [res, setRes] = useState({});
@@ -120,7 +123,7 @@ const Main = () => {
           <h2 className="content-title"> Dashboard </h2>
         </div>
 
-        <TopTotal orders={orders} products={products} />
+        <TopTotal orders={orders} products={products} lowStockCount={lowStockCount} />
         <div className="row">
         <div className="col-xl-12 col-lg-12">
       <div className="card mb-4 shadow-sm flex-dashboard">

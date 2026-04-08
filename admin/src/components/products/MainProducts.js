@@ -12,6 +12,7 @@ const MainProducts = () => {
   const [keyword, setKeyword] = useState();
   const [isSearch, setIsSearch] = useState(0);
   const [data, setData] = useState([]);
+  const [threshold, setThreshold] = useState(10);
   const dispatch = useDispatch();
   let history = useHistory();
 
@@ -20,6 +21,11 @@ const MainProducts = () => {
 
   const productDelete = useSelector((state) => state.productDelete);
   const { error: errorDelete, success: successDelete } = productDelete;
+
+  const thresholdNumber = Number(threshold || 0);
+  const lowStockProducts = (products || []).filter(
+    (product) => Number(product.countInStock ?? 0) <= thresholdNumber
+  );
 
   useEffect(() => {
     dispatch(listProducts());
@@ -40,12 +46,44 @@ const MainProducts = () => {
 
   const handleChangeOption = async (e) => {
     try {
+      if (e.target.value === "all") {
+        setIsSearch(0);
+        setData([]);
+        dispatch(listProducts());
+        return;
+      }
+
+      if (e.target.value === "low-stock") {
+        const response = await axios.get(
+          `${URL}/api/products/low-stock?threshold=${thresholdNumber}`
+        );
+        if (response.status === 200) {
+          setIsSearch(1);
+          setData(response.data.data);
+        }
+        return;
+      }
+
       const data = await axios.get(
         `${URL}/api/products/searchProduct/${e.target.value}`
       );
       if (data.status === 200) {
         setIsSearch(1);
         setData(data.data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const showLowStock = async () => {
+    try {
+      const response = await axios.get(
+        `${URL}/api/products/low-stock?threshold=${thresholdNumber}`
+      );
+      if (response.status === 200) {
+        setIsSearch(1);
+        setData(response.data.data);
       }
     } catch (error) {
       console.log(error);
@@ -78,13 +116,43 @@ const MainProducts = () => {
             </div>
             <div className="col-lg-2 col-6 col-md-3"></div>
             <div className="col-lg-2 col-6 col-md-3">
+              <input
+                type="number"
+                min="0"
+                className="form-control"
+                value={threshold}
+                onChange={(e) => setThreshold(e.target.value)}
+                placeholder="Ngưỡng"
+              />
+            </div>
+            <div className="col-lg-2 col-6 col-md-3">
               <select
                 className="form-select"
                 onChange={(e) => handleChangeOption(e)}
               >
+                <option value="all">Tất cả</option>
                 <option value="old">Thêm mới nhất</option>
                 <option value="new">Thêm cũ nhất</option>
+                <option value="low-stock">Sắp hết hàng</option>
               </select>
+            </div>
+          </div>
+          <div className="row gx-3 pb-2">
+            <div className="col-12">
+              {lowStockProducts.length > 0 ? (
+                <div className="alert alert-danger d-flex justify-content-between align-items-center mb-0 py-2">
+                  <span>
+                    Có {lowStockProducts.length} sản phẩm sắp hết hàng (ngưỡng {thresholdNumber})
+                  </span>
+                  <button className="btn btn-sm btn-danger" onClick={showLowStock}>
+                    Xem ngay
+                  </button>
+                </div>
+              ) : (
+                <div className="alert alert-success mb-0 py-2">
+                  Không có sản phẩm sắp hết hàng với ngưỡng {thresholdNumber}
+                </div>
+              )}
             </div>
           </div>
         </header>

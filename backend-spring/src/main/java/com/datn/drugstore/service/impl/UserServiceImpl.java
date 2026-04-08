@@ -8,6 +8,7 @@ import com.datn.drugstore.repository.UserRepository;
 import com.datn.drugstore.request.RegisterRequest;
 import com.datn.drugstore.request.UpdateProfileRequest;
 import com.datn.drugstore.service.EmailService;
+import com.datn.drugstore.service.GoogleTokenVerifier;
 import com.datn.drugstore.service.LoginAttemptService;
 import com.datn.drugstore.service.TokenSessionService;
 import com.datn.drugstore.service.UserService;
@@ -23,6 +24,7 @@ import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,7 @@ public class UserServiceImpl implements UserService {
     private final JWTHelper jwtHelper;
     private final LoginAttemptService loginAttemptService;
     private final TokenSessionService tokenSessionService;
+    private final GoogleTokenVerifier googleTokenVerifier;
     private final RedisTemplate<String, String> redisTemplate;
     private final OtpProducer otpProducer;
 
@@ -67,6 +70,30 @@ public class UserServiceImpl implements UserService {
         String token = jwtHelper.generateToken(user.getId());
         
         tokenSessionService.saveActiveSession(email, token);
+
+        return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(),
+                user.getIsAdmin(), user.getCreatedAt(), token);
+    }
+
+    @Override
+    @Transactional
+    public UserDTO loginWithGoogle(String idToken) {
+        GoogleTokenVerifier.GoogleUserInfo info = googleTokenVerifier.verify(idToken);
+        String email = info.getEmail().trim().toLowerCase();
+
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user == null) {
+            user = new User();
+            user.setName(info.getName() != null && !info.getName().isBlank() ? info.getName() : email);
+            user.setEmail(email);
+            user.setPhone(null);
+            user.setPassword(passwordEncoder.encode(UUID.randomUUID().toString()));
+            user.setIsAdmin(false);
+            user = userRepository.save(user);
+        }
+
+        String token = jwtHelper.generateToken(user.getId());
+        tokenSessionService.saveActiveSession(user.getEmail(), token);
 
         return new UserDTO(user.getId(), user.getName(), user.getEmail(), user.getPhone(),
                 user.getIsAdmin(), user.getCreatedAt(), token);

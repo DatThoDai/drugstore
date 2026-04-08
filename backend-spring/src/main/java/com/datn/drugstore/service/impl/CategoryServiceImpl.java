@@ -10,9 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.CacheEvict;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +20,6 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Override
-    @Cacheable(value = "categories")
     public List<CategoryDTO> getAllCategories() {
         return categoryRepository.findAll().stream()
                 .map(this::convertToDTO)
@@ -31,7 +27,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Cacheable(value = "categories")
     public List<CategoryDTO> getAllCategoriesWithShow() {
         return categoryRepository.findByIsShowTrueAndIsParentTrue().stream()
                 .map(this::convertToDTO)
@@ -39,7 +34,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Cacheable(value = "categories")
     public List<CategoryDTO> getAllChildCategories() {
         return categoryRepository.findByIsParentFalse().stream()
                 .map(this::convertToDTO)
@@ -47,7 +41,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Cacheable(value = "categories")
     public List<CategoryDTO> getChildCategoriesByParent(String parentId) {
         return categoryRepository.findByIsShowTrueAndIsParentFalseAndParentCategory(parentId).stream()
                 .map(this::convertToDTO)
@@ -63,7 +56,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "categories", allEntries = true)
     public CategoryDTO createCategory(CreateCategoryRequest request) {
         List<Category> existing = categoryRepository.findAll().stream()
                 .filter(c -> c.getName().equals(request.getName()))
@@ -85,7 +77,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "categories", allEntries = true)
     public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -94,7 +85,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "categories", allEntries = true)
     public CategoryDTO updateCategory(Long id, UpdateCategoryRequest request) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
@@ -113,7 +103,6 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "categories", allEntries = true)
     public CategoryDTO updateCategoryStatus(Long id, Boolean isShow) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));

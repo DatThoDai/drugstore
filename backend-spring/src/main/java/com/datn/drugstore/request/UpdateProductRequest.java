@@ -15,6 +15,7 @@ public class UpdateProductRequest {
     private String description;
     private String image;
     private Integer countInStock;
+    private Integer lowStockThreshold;
     private BigDecimal loanPrice;
     private Long category;
     private String ma;

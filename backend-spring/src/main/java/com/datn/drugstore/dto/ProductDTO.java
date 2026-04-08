@@ -24,6 +24,7 @@ public class ProductDTO implements Serializable {
     private CategoryDTO category;
     private BigDecimal price;
     private Integer countInStock;
+    private Integer lowStockThreshold;
     private BigDecimal loanPrice;
     private Boolean isBought;
     private LocalDateTime createdAt;

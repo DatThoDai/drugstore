@@ -21,6 +21,7 @@ const AddProductMain = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [countInStock, setCountInStock] = useState(0);
+  const [lowStockThreshold, setLowStockThreshold] = useState(10);
   const [description, setDescription] = useState("");
   const [loanPrice, setLoanPrice] = useState(0);
   const [category, setCategory] = useState("");
@@ -64,6 +65,7 @@ const AddProductMain = () => {
       setCountInStock(0);
       setImages("");
       setPrice(0);
+      setLowStockThreshold(10);
       setLoanPrice(0);
       setCategory("");
     }
@@ -80,6 +82,7 @@ const AddProductMain = () => {
           description,
           image,
           countInStock,
+          lowStockThreshold,
           loanPrice,
           category ? Number(category) : null,
           bought
@@ -201,6 +204,20 @@ const AddProductMain = () => {
                       required
                       value={countInStock}
                       onChange={(e) => setCountInStock(e.target.value)}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label htmlFor="product_threshold" className="form-label">
+                      Ngưỡng cảnh báo tồn kho
+                    </label>
+                    <input
+                      type="number"
+                      placeholder="Type here"
+                      className="form-control"
+                      id="product_threshold"
+                      min="0"
+                      value={lowStockThreshold}
+                      onChange={(e) => setLowStockThreshold(e.target.value)}
                     />
                   </div>
                   <div className="mb-4">

@@ -51,6 +51,9 @@ app:
   name: Drugstore
   url: ${APP_URL:http://localhost:3000}
 
+google:
+  client-id: ${GOOGLE_CLIENT_ID:}
+
 vnpay:
   url: ${VNPAY_URL:https://sandbox.vnpayment.vn/paymentv2/vpcpay.html}
   tmn-code: ${VNPAY_TMN_CODE:2Y0P3N8L}

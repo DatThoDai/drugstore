@@ -9,6 +9,8 @@ import Message from "./../components/LoadingError/Error";
 const PlaceOrderScreen = ({ history }) => {
   window.scrollTo(0, 0);
 
+  const taxRate = 0.02;
+
   const [showLeaveModal, setShowLeaveModal] = useState(false);
 
   const dispatch = useDispatch();
@@ -43,7 +45,7 @@ const PlaceOrderScreen = ({ history }) => {
         cart.cartItems.reduce((acc, item) => acc + item.price * item.qty, 0)
       );
       const shippingPrice = addDecimals(itemsPrice > 500000 ? 0 : 30000);
-      const taxPrice = addDecimals(Number(0.05 * itemsPrice));
+      const taxPrice = addDecimals(Number(taxRate * itemsPrice));
       const totalPrice = Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice);
       
       return {
@@ -61,7 +63,7 @@ const PlaceOrderScreen = ({ history }) => {
         cart.cartItems.reduce((acc, item) => acc + (item.loanPrice || 0) * item.qty, 0)
       );
       const shippingLoanPrice = addDecimals(itemsLoanPrice > 100 ? 0 : 100);
-      const taxLoanPrice = addDecimals(Number(0.05 * itemsLoanPrice));
+      const taxLoanPrice = addDecimals(Number(taxRate * itemsLoanPrice));
       const totalLoanPrice = Number(itemsLoanPrice) + Number(shippingLoanPrice) + Number(taxLoanPrice);
       
       return {

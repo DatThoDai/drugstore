@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface UserService {
     UserDTO login(LoginRequest loginRequest);
+    UserDTO loginWithGoogle(String idToken);
     UserDTO register(RegisterRequest registerRequest);
     UserDTO getProfile(Long userId);
     UserDTO updateProfile(Long userId, UpdateProfileRequest request);

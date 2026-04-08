@@ -83,7 +83,7 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 };
 
 export const createProduct =
-  (name, price, description, image, countInStock, loanPrice, category, bought) =>
+  (name, price, description, image, countInStock, lowStockThreshold, loanPrice, category, bought) =>
   async (dispatch, getState) => {
     try {
       dispatch({ type: PRODUCT_CREATE_REQUEST });
@@ -106,6 +106,7 @@ export const createProduct =
           description,
           image,
           countInStock,
+          lowStockThreshold,
           loanPrice,
           category,
           bought

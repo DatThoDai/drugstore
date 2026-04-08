@@ -15,14 +15,6 @@ import {
   orderListReducer,
 } from "./Reducers/OrderReducres";
 
-import {
-  pdfCreateReducer,
-  pdfDeleteReducer,
-  pdfEditReducer,
-  pdfListReducer,
-  pdfUpdateReducer,
-} from "./Reducers/PdfReducers";
-
 const reducer = combineReducers({
   userLogin: userLoginReducer,
   userList: userListReducer,
@@ -35,11 +27,6 @@ const reducer = combineReducers({
   orderList: orderListReducer,
   orderDetails: orderDetailsReducer,
   orderDeliver: orderDeliveredReducer,
-  pdfList: pdfListReducer,
-  pdfDelete: pdfDeleteReducer,
-  pdfCreate: pdfCreateReducer,
-  pdfEdit: pdfEditReducer,
-  pdfUpdate: pdfUpdateReducer,
 });
 
 const userInfoFromLocalStorage = localStorage.getItem("userInfo")

@@ -429,7 +429,7 @@ public class OrderServiceImpl implements OrderService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal shippingPrice = itemsPrice.compareTo(new BigDecimal("500000")) > 0
                 ? BigDecimal.ZERO : new BigDecimal("30000");
-        BigDecimal taxPrice = itemsPrice.multiply(new BigDecimal("0.15"))
+        BigDecimal taxPrice = itemsPrice.multiply(new BigDecimal("0.02"))
                 .setScale(2, java.math.RoundingMode.HALF_UP);
         BigDecimal totalPrice = itemsPrice.add(shippingPrice).add(taxPrice);
 
@@ -456,6 +456,7 @@ public class OrderServiceImpl implements OrderService {
                                 item.getProduct().getImage(), item.getProduct().getDescription(), null,
                                 item.getProduct().getRating(), item.getProduct().getNumReviews(), null,
                                 item.getProduct().getPrice(), item.getProduct().getCountInStock(),
+                                item.getProduct().getLowStockThreshold() != null ? item.getProduct().getLowStockThreshold() : 10,
                                 item.getProduct().getLoanPrice(), item.getProduct().getIsBought(),
                                 item.getProduct().getCreatedAt(), item.getProduct().getUpdatedAt())))
                 .collect(Collectors.toList());

@@ -3,6 +3,7 @@ package com.datn.drugstore.controller;
 import com.datn.drugstore.dto.UserDTO;
 import com.datn.drugstore.entity.User;
 import com.datn.drugstore.exception.InvalidCredentialsException;
+import com.datn.drugstore.request.GoogleLoginRequest;
 import com.datn.drugstore.request.LoginRequest;
 import com.datn.drugstore.request.UpdateProfileRequest;
 import com.datn.drugstore.response.BaseResponse;
@@ -62,6 +63,12 @@ public class UserController {
             
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
+    }
+
+    @PostMapping("/google-login")
+    public ResponseEntity<BaseResponse> loginWithGoogle(@Valid @RequestBody GoogleLoginRequest request) {
+        UserDTO userDTO = userService.loginWithGoogle(request.getIdToken());
+        return ResponseFactory.success(userDTO, "Đăng nhập Google thành công");
     }
 
     @PostMapping
